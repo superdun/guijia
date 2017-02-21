@@ -1,0 +1,15 @@
+{% extends 'admin/model/create.html' %}
+
+{% block tail %}
+    {{ super() }}
+            <script src="{{url_for('static', filename='vendor/noty/js/jquery.noty.js')}}"></script>
+            <script src="{{url_for('static', filename='vendor/noty/js/layouts/inline.js')}}"></script>
+            <script src="{{url_for('static', filename='vendor/noty/js/themes/bootstrap.js')}}"></script>
+
+    <script src="{{url_for('static', filename='vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js')}}/"></script>
+<script src="{{url_for('static', filename='vendor/jQuery-File-Upload/js/jquery.iframe-transport.js')}}"></script>
+<script src="{{url_for('static', filename='vendor/jQuery-File-Upload/js/jquery.fileupload.js')}}"></script>
+    <script src="{{url_for('static', filename='vendor/ckeditor/ckeditor.js')}}"></script>
+            <script src="{{url_for('static', filename='vendor/admin/main.js')}}"></script>
+{% endblock %}
+

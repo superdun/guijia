@@ -1,0 +1,13 @@
+{
+  "name": "ckeditor",
+  "homepage": "https://github.com/wallstreetcn/ckeditor",
+  "_release": "80c7e30f8a",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "80c7e30f8a7bc1fc259809a3bc19dafddd5c5c9d"
+  },
+  "_source": "https://github.com/wallstreetcn/ckeditor.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/wallstreetcn/ckeditor.git"
+}

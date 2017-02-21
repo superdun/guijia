@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>盾半仙的相面馆</title>
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+</head>
+<body id="body">
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+        <div class="col-md-6 col-sm-10 col-xs-12">
+            <!--<img src="{{url_for('static', filename='demos/face/head.jpg')}}" width="100%">-->
+            <h2>颜值测评 0.2.1 by Dun</h2>
+
+            <div class="alert alert-warning alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <strong>注意！</strong> <br>
+                <ul>
+                    <li>
+                        更新日志：0.2.1：
+                        将帅哥美女三甲分开展示.
+                        修改了一些权重值
+                        一些细节优化
+                    </li>
+                    <li>
+                        此功能仅供娱乐，请勿当真，每张图片上请保证有且只有一张（人）脸
+                    </li>
+                    <li>
+                        如果你的颜值进入前三名，则会显示在页面上哦....
+                    </li>
+                    <li>
+                        <strong>千万不要上传一些不正经的图片</strong>，我会过滤的，哼！
+                    </li>
+                    <li>
+                        如果我不小心过滤失败了，不正经的图片又进了前三名，显示在了页面上，后果自负哦
+                    </li>
+                    <li>
+                        开发纯属个人爱好，使用face++免费接口，和极其廉价的服务器，所以请勿上传超过1.5M的图片
+                    </li>
+                    <li>
+                        也不要恶意多次上传，测测自己就好了，理由同上..
+                    </li>
+                    <li>
+                        很大的可能会失败，请多试几次，理由同上+1..
+                    </li>
+                    <li>
+                        如果一直失败，你有请按下列步骤解决（ 1.联系我，微信号：lajidun 2.给我发红包，我换更好的服务器 3. 搞定...）
+                    </li>
+                    <li>
+                        如你觉得我说的这些没法接受，关掉页面吧 T_T,<strong>千万不要上传一些不正经的图片!!</strong>
+                    </li>
+                </ul>
+                <button type="button" data-dismiss="alert"><span aria-hidden="true">我知道了！</span><span class="sr-only">Close</span>
+                </button>
+            </div>
+
+        </div>
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+        <div class="col-md-6 col-sm-10 col-xs-12" id="imgContainer">
+            <label>请选择你想测的照片：</label>
+            <input type="file" id="file_input" class="form-control">
+            <div id="uploadContainer"></div>
+        </div>
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+        <div class="col-md-6 col-sm-10 col-xs-12">
+            <br>
+            <button type="button" id="upload" data-loading-text="开始测评" class="btn btn-primary" autocomplete="off">
+                开始测评
+            </button>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                       aria-expanded="true" aria-controls="collapseOne">
+                                        <span class="caret"></span>      帅哥三甲
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        {% for i in listMale %}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="{{ i['sourceImg'] }}" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：{{i['grade']}}分</div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+                                       href="#collapseTwo"
+                                       aria-expanded="false" aria-controls="collapseTwo">
+                                        <span class="caret"></span>     美女三甲
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        {% for j in listFemale %}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="{{ j['sourceImg'] }}" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：{{j['grade']}}分</div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+                                       href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        <span class="caret"></span>     可爱宝宝    <span class="label label-danger">new!</span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        {% for k in listBaby %}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="{{ k['sourceImg'] }}" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">可爱值：{{100-(400/k['grade']|int)|round(3)}}分</div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+
+                </div>
+        <div class="col-md-3 col-sm-1 col-xs-0"></div>
+
+    </div>
+
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">测评结果</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-primary" id="panel">
+                    <div class="panel-heading">颜值测评报告</div>
+                    <div class="panel-body">
+                        <table class="table" id="result-table">
+                            <tr>
+                                <td style="width:50%;">
+                                    <img src="" id="sourceImg" style="width:100%;">
+                                </td>
+                                <td style="width:50%;">
+                                    <img src="" style="width:100%;" id="resultImg">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    比例评分：
+                                </td>
+                                <td id="feel">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    眼睛评分：
+                                </td>
+                                <td id="eye">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    鼻子评分：
+                                </td>
+                                <td id="nose">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    嘴巴评分：
+                                </td>
+                                <td id="mouth">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    下颌评分：
+                                </td>
+                                <td id="chin">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;" font>
+                                    <p style="color:red;">综合评分：</p>
+                                </td>
+                                <td id="grade">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:30%;">
+                                    评语：
+                                </td>
+                                <td id="comment">
+
+                                </td>
+                            </tr>
+
+                        </table>
+                        <div id="error-container">
+                            <div class="alert alert-danger" role="alert" id="error-message"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</body>
+<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+<script>
+window.onload = function(){
+        var input = document.getElementById("file_input");
+        var result,div;
+
+
+        if(typeof FileReader==='undefined'){
+            result.innerHTML = "抱歉，你的浏览器不支持 FileReader";
+            input.setAttribute('disabled','disabled');
+        }else{
+            input.addEventListener('change',readFile,false);
+        }　　　　//handler
+        function readFile(){
+
+                if (!input['value'].match(/.jpg|.gif|.png|.bmp/i)){　　//判断上传文件格式
+                    return alert("上传的图片格式不正确，请重新选择")　　　　　　　　}
+                var reader = new FileReader();
+                reader.readAsDataURL(this.files[0]);
+                reader.onload = function(e){
+                    result = '<div id="result" align="center"><img src="'+this.result+'" alt="" style="width:100%"/></div>';
+                    dataResult = this.result;
+                    document.getElementById('uploadContainer').innerHTML = result;
+                }
+
+        }
+        $('#upload').click(function(){
+            var formData= new FormData();
+            var img = document.getElementById("file_input").files[0];
+            formData.append('img',img)
+            $('#upload').attr('disabled','true')
+            $.ajax({
+                url:'/face',
+                type:'post',
+                data:formData,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    $('#myModal').modal()
+                    if (data['status']=='ok'){
+                        $('#panel').attr('class','panel panel-primary')
+                        $('.panel-heading').text('测评报告')
+                        $('#error-container').css('visibility','hidden')
+                        $('#result-table').css('display','block')
+                        var grades = data['grades']
+                        $('#eye').text(grades['eye'])
+                        $('#mouth').text(grades['mouth'])
+                        $('#nose').text(grades['nose'])
+                        $('#chin').text(grades['chin'])
+                        $('#feel').text(grades['feel'])
+                        $('#grade').html('<p style="color:red;">'+grades['grade']+'</p>')
+                        $('#comment').text(data['comment'])
+                        $('#sourceImg').attr('src',data['sourceImg'])
+                        $('#resultImg').attr('src',data['imgResult']['localUrl'])
+                        $('#upload').removeAttr('disabled')
+
+                    }
+                    else{
+                        $('#panel').attr('class','panel panel-danger')
+                        $('.panel-heading').text('错误！')
+                        $('#error-container').css('visibility','visible')
+                        $('#result-table')            <div class="alert alert-warning alert-dismissible fade in">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <strong>注意！</strong> <br>
+                <ul>
+                    <li>
+                        更新日志：0.2.1：
+                        将帅哥美女三甲分开展示.
+                        修改了一些权重值
+                        一些细节优化
+                    </li>
+                    <li>
+                        此功能仅供娱乐，请勿当真，每张图片上请保证有且只有一张（人）脸
+                    </li>
+                    <li>
+                        如果你的颜值进入前三名，则会显示在页面上哦....
+                    </li>
+                    <li>
+                        <strong>千万不要上传一些不正经的图片</strong>，我会过滤的，哼！
+                    </li>
+                    <li>
+                        如果我不小心过滤失败了，不正经的图片又进了前三名，显示在了页面上，后果自负哦
+                    </li>
+                    <li>
+                        开发纯属个人爱好，使用face++免费接口，和极其廉价的服务器，所以请勿上传超过1.5M的图片
+                    </li>
+                    <li>
+                        也不要恶意多次上传，测测自己就好了，理由同上..
+                    </li>
+                    <li>
+                        很大的可能会失败，请多试几次，理由同上+1..
+                    </li>
+                    <li>
+                        如果一直失败，你有请按下列步骤解决（ 1.联系我，微信号：lajidun 2.给我发红包，我换更好的服务器 3. 搞定...）
+                    </li>
+                    <li>
+                        如你觉得我说的这些没法接受，关掉页面吧 T_T,<strong>千万不要上传一些不正经的图片!!</strong>
+                    </li>
+                </ul>
+                <button type="button" data-dismiss="alert"><span aria-hidden="true">我知道了！</span><span class="sr-only">Close</span>
+                </button>
+            </div>
+
+        </div>
+
+                        $('#error-message').text(data['error'])
+                        $('#upload').removeAttr('disabled')
+
+                    }
+
+                },
+                error: function () {
+                        alert("上传失败！");
+                        $('#upload').removeAttr('disabled')
+                },
+                timeout:20000
+            })
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>

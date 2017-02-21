@@ -1,0 +1,111 @@
+﻿{% extends "base.html" %} 
+{% block content %}
+<div class='row'>
+  <div class='col-md-3'></div>
+  <div class='col-md-6' align='center'>
+    <ul style='list-style: none'>
+      <li>
+        <h2>网站作者：大盾犬</h2></li>
+      <li>
+        <h4>爱编程，爱吃肉</h4></li>
+      <li>
+        <h4>学化工的</h4></li>
+      <li>
+        <h4>还爱踢球，不爱学英语</h4>
+        <li>
+          <h4>
+            <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>扫一扫，找我玩o(^▽^)o</h4>
+        </li>
+      </li>
+    </ul>
+  </div>
+  <div class='col-md-3'></div>
+</div>
+<div class='row'>
+  <div class='col-md-3'></div>
+  <div class='col-md-6' id='canvas_container'>
+    <canvas id="QR"></canvas>
+  </div>
+  <div class='col-md-3'></div>
+</div>
+{% endblock %} 
+{% block script %}
+$('#dropdown_menu').addClass('active')
+document.getElementById('QR').height=document.getElementById('QR').width=$('#canvas_container').width()
+
+var draw={
+	init:function(){
+		draw.img=new Image
+		draw.img.src='{{url_for('static', filename='stationmaker/wxQR.jpg')}}'
+		draw.ctx=document.getElementById('QR').getContext('2d')
+		var w=draw.w=$('#QR').width()
+		draw.img.onload=function(){
+			draw.ctx.translate(w/2,w/2)
+			draw.ctx.drawImage(draw.img,-w/3,-w/3,w/1.5,w/1.5)
+			draw.angle=0
+		
+		}
+		draw.lingrad=draw.ctx.createLinearGradient(-w/2,-w/2,w/2,w/2)
+		draw.lingrad.addColorStop(0,'#ff0000')
+		draw.lingrad.addColorStop(1/4,'#fff000')
+		draw.lingrad.addColorStop(2/4,'#000fff')
+		draw.lingrad.addColorStop(3/4,'#00ff00')
+		draw.lingrad.addColorStop(1,'#ff0000')
+		$('#QR').click(function(){
+			draw.status=1
+			clearInterval(draw.timer)
+			draw.timer=setInterval(draw.rotate,20)
+			
+		})
+	},
+	rotate:function(){
+		var w=draw.w
+		draw.ctx.clearRect(-w/2,-w/2,w,w)
+		draw.ctx.rotate(draw.angle)
+		draw.ctx.drawImage(draw.img,-w/3,-w/3,w/1.5,w/1.5)
+		if (draw.angle<Math.PI/360 && draw.status==1){
+			if (draw.angle==0){
+				draw.angle=draw.angle+Math.PI/7200
+			}
+			draw.last_angel=draw.angle
+			draw.angle+=0.0003
+		}
+		else{
+			if(draw.angle>=Math.PI/360){
+				draw.status=0
+			}
+		
+				if (draw.angle > Math.PI/7200){
+					draw.last_angel=draw.angle
+					draw.angle/=1.005
+				}
+				else{
+					draw.angle=0
+				}
+			}
+		
+		draw.tail(draw.angle*0.7/(Math.PI/360))
+	},
+	tail:function(angle_speed){
+		var pi=Math.PI
+		
+		var tail_angle=[]
+		for(var k=0;k<20;k++){
+			tail_angle.push(angle_speed*k*0.5*pi/80)
+		}
+		for (var i=0;i<tail_angle.length-1;i++){
+
+			draw.ctx.strokeStyle=draw.lingrad
+			draw.ctx.lineWidth=0.6*(i+1)*angle_speed
+			for (var j=0;j<4;j++){	
+				draw.ctx.beginPath()
+				draw.ctx.arc(0,0,1.414*draw.w/3,(j*pi/2)+pi/4-(tail_angle[i+1]),(j*pi/2)+pi/4-(tail_angle[i]),false)
+				draw.ctx.stroke()
+			}
+			
+		}
+	}
+}
+window.onload=function(){draw.init()}
+
+{% endblock %} 

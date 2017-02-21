@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-2"></div>
+<div class='col-md-8 page-article' >
+    <h1 class='article-title'>{{item.title}}</h1>
+    <div class="meta">
+        <span class="item time"> {{item.create_at}} </span>
+        <span class="item">
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+            <span class="wscn-cm-counter">{{item.view_count}} </span>
+        </span>
+
+        <div class="pull-right"></div>
+    </div>
+    <div class="article-content">
+    {{item.content|safe }}
+    </div>
+</div>
+<div class="col-md-2"></div>
+{% endblock %} 
+{% block script %}
+var goalname=''
+<!-- 全局变量获取内容的题目，以供模板form,ajax使用 -->
+{% include 'form.js' %}
+<!-- 处理表单的表达 -->
+{% include 'ajax.js' %}
+<!-- 表单的ajax -->
+{% endblock %}
