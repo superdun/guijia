@@ -16,6 +16,7 @@ body > div.container{
 .btn, .btn-large{
     background-color:#ee6e73;
 }
-.preview_img{
-    height:100px;
+.detailTd{
+    width:30%;
+    color: #ee6e73;
 }

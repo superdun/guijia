@@ -14,7 +14,7 @@
 <body>
 <nav>
     <div class="nav-wrapper container">
-        <a href="#" class="brand-logo"><i class="material-icons">home</i>归家网</a>
+        <a href="{{ url_for('index') }}" class="brand-logo"><i class="material-icons">home</i>归家网</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{{url_for('comparison')}}">照片识别</a></li>
             <li><a href="{{url_for('emergencyList')}}">紧急发布</a></li>

@@ -1,64 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <h3 class="page_title"> 走失信息</h3>
-        <h5>本模块数据来源于<a href="http://www.baobeihuijia.com/list.aspx?tid=1">宝贝回家</a>网站，侵权立删</h5>
-        <div class="col s12 m12 l12 z-depth-2">
-            <div class="row ">
-                <div class="col s12 m6 l5">
-                    <img class="responsive-img" src="#">
-                </div>
-                <div class="col s12 m6 l7">
-                    <table class="bordered responsive-table center">
+    <div class="container">
+        <div class="row">
+            <h3 class="page_title"> 走失信息</h3>
 
-                        <tbody>姓名
-                        <tr>
-                            <td>姓名：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>性别：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>生日</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>丢失日期：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>身高：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>户籍：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>失踪地：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>描述：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>联系人姓名：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        <tr>
-                            <td>联系人电话：</td>
-                            <td>Eclair</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="col s12 m12 l12 z-depth-2">
+                <div class="row ">
+                    <div class="col s12 m6 l5">
+                        {% if item.source == 'baobeihuijia' %}
+                            <h6>本条数据来源于<a href="http://www.baobeihuijia.com/view.aspx?id={{ item.bid }}">宝贝回家</a>网站，侵权立删
+                            </h6>
+                        {% endif %}
+                        <img class="responsive-img" src="{{ bbhj_img_domain }}{{ item.image }}">
+                    </div>
+                    <div class="col s12 m6 l7">
+                        <table class="bordered highlight">
+
+                            <tbody>
+                            <tr>
+                                <td class="detailTd">姓名：</td>
+                                <td>{{ item.name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">性别：</td>
+                                <td>{{ item.gender }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">生日</td>
+                                <td>{{ item.birthday }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">丢失日期：</td>
+                                <td>{{ item.missing_time }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">身高：</td>
+                                <td>{{ item.height }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">户籍：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">失踪地：</td>
+                                <td>
+                                    {{ item.missing_location_province }}{{ item.missing_location_city }}{{ item.missing_location_town }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">描述：</td>
+                                <td>{{ item.description }}</td>
+                            </tr>
+                            <tr>
+                                <td class="detailTd">联系人姓名：</td>
+                                {% if item.source == 'baobeihuijia' %}
+                                    <td><a href="http://www.baobeihuijia.com/view.aspx?id={{ item.bid }}">宝贝回家网</a></td>
+                                {% else %}
+                                    <td>{{ item.c_name }}</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="detailTd">联系人电话：</td>
+                                {% if item.source == 'baobeihuijia' %}
+                                    <td><a href="http://www.baobeihuijia.com/view.aspx?id={{ item.bid }}">宝贝回家网</a></td>
+                                {% else %}
+                                    <td>{{ item.c_tel }}</td>
+                                {% endif %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
             </div>
-
         </div>
     </div>
-</div>
 {% endblock %}

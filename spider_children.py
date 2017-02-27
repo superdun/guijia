@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 class MissingChild (Base):
-    __tablename__ = 'missingchild'
+    __tablename__ = 'missingchildren'
 
     id = Column(Integer, primary_key=True)
 
@@ -46,7 +46,7 @@ class MissingChild (Base):
     created_at = Column(String)
     
     volunteer = Column(String)
-
+    short_name= Column(String)
 
 engine = create_engine('mysql+mysqlconnector://root:password@localhost:3306/guijia')
 DBSession = sessionmaker(bind=engine)
@@ -110,7 +110,8 @@ def baseRecord():
                                     created_at=created_at,
                                     volunteer=volunteer,
                                     source='baobeihuijia',
-                                    status='open'
+                                    status='open',
+                                    short_name=name.split('(')[0].split(u'（')[0].split(' ')[0]
                                     )
             print name
             session.add(newChild)
@@ -179,7 +180,8 @@ def addRecord():
                                     created_at=created_at,
                                     volunteer=volunteer,
                                     source='baobeihuijia',
-                                    status='open'
+                                    status='open',
+                                    short_name=name.split('(')[0].split(u'（')[0].split(' ')[0]
                                     )
             print name
             hasName = len(session.query(MissingChild).filter(MissingChild.name == name).all())

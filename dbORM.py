@@ -65,11 +65,11 @@ class Missingchildren(db.Model):
     created_at = db.Column(db.String(1200))
     volunteer = db.Column(db.String(1200))
     status = db.Column(db.String(1200))
-
+    short_name=db.Column(db.String(1200))
     def __init__(self, bid='', image='', name='', gender='', birthday='', height='', missing_time='', source='',
                  c_name='', c_tel='', confirm_location='', missing_location_province='',
                  missing_location_city='', missing_location_town='', description='', comment='', login_time='',
-                 volunteer='', status='open'):
+                 volunteer='', status='open',short_name=''):
         self.bid = bid
         self.image = image
         self.name = name
@@ -90,6 +90,6 @@ class Missingchildren(db.Model):
         self.created_at = time.time()
         self.volunteer = volunteer
         self.status = status
-
+        self.short_name=short_name
     def __repr__(self):
         return '<MissingChildren %r>' % self.name

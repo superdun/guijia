@@ -3,7 +3,7 @@
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
 from dbORM import db, User,Missingchildren
 import thumb
-from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL, redis_store
+from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
 import flask_login
 from moduleWechat import wechat_resp
@@ -37,9 +37,17 @@ def disappearanceList():
     local_img_domain = QINIU_DOMAIN
     page, per_page, offset = get_page_args()
     per_page = app.config.get('PER_PAGE')
-    items = Missingchildren.query.filter(Missingchildren.status == 'open' or Missingchildren.status == None  ).order_by('id desc').offset(offset).limit(per_page).all()
+    items = Missingchildren.query.filter(Missingchildren.status == 'open').order_by('id desc').offset(offset).limit(per_page).all()
+    print len(items)
     pagination = Pagination(page=page, total=len(items))
     return render_template('disappearanceList.html',items=items,pagination=pagination,bbhj_img_domain=bbhj_img_domain,local_img_domain=local_img_domain)
+@app.route('/disappearance/<disappearanceId>')
+def disappearanceDetail(disappearanceId):
+    bbhj_img_domain = app.config.get('BAOBEIHUIJIA_IMG_DOMAIN')
+    local_img_domain = QINIU_DOMAIN
+    item = Missingchildren.query.filter(Missingchildren.id == disappearanceId).first()
+    return render_template('disappearanceDetail.html',item=item,bbhj_img_domain=bbhj_img_domain,local_img_domain=local_img_domain)
+
 @app.route('/comparison')
 def comparison():
     return render_template('comparisonList.html')
