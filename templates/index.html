@@ -1,48 +1,435 @@
-﻿{% extends "base.html" %} 
+{% extends "base.html" %} 
 {% block content %}
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        {% for carousel in carousels %}
-          {% if loop.index0 == 0 %}
-          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-          {% else %}
-          <li data-target="#myCarousel" data-slide-to="{{loop.index0}}" class=""></li>
-          {% endif %}
-        {% endfor %}
-      </ol>
-      <div class="carousel-inner" role="listbox">
-      {% for carousel in carousels %}
-        {% if loop.index == 1%}
-        <div class="item active">
-        {% else %}
-        <div class="item">
-        {% endif %}
-          <img  src="http://{{img_domain}}/{{carousel.img}}{{thumbnail}}" >
-          <div class="container">
-            <div class="carousel-caption">
-        <h1>{{carousel.title}}</h1>
-        <p>{{carousel.content}}</p>
+<div class="container">
+    <h4><i class="material-icons">error_outline</i>紧急发布<span><a href="#" class="more">更多</a></span></h4>
+    <div class="divider"></div>
+    <div class="row">
+        <div class="col s12 m6 l3">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                  src="http://materializecss.com/images/office.jpg">
+                </div>
+                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a href="#">查看详情</a></p></div>
+                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
+                        class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
             </div>
-          </div>
         </div>
-      {% endfor %}
-      </div>
-      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
+        <div class="col s12 m6 l3">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                  src="http://materializecss.com/images/office.jpg">
+                </div>
+                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a href="#">查看详情</a></p></div>
+                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
+                        class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
+            </div>
+        </div>
+        <div class="col s12 m6 l3">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="http://materializecss.com/images/office.jpg">
+                </div>
+                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a href="#">查看详情</a></p></div>
+                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
+                        class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
+            </div>
+        </div>
+        <div class="col s12 m6 l3">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                  src="http://materializecss.com/images/office.jpg">
+                </div>
+                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a href="#">查看详情</a></p></div>
+                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
+                        class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <h4><i class="material-icons">photo_library</i>疑似照片在线识别<span><a href="#" class="more">更多</a></span></h4>
+    <div class="card">
+        <div class="card-content">
+            <p>可以通过归家网公众号，或是网页，将您拍摄的疑似走失人员的正脸照片上传，我们将对其与数据库中的走失人员照片进行比对，并返回相似度。</p>
+        </div>
+        <div class="card-tabs">
+            <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#test4">公众号</a></li>
+                <li class="tab"><a class="active" href="#test5">网页</a></li>
+            </ul>
+        </div>
+        <div class="card-content grey lighten-4">
+            <div id="test4"><img class="responsive-img" src="http://materializecss.com/images/office.jpg"></div>
+            <div id="test5"><img class="responsive-img" src="http://materializecss.com/images/office.jpg"></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <h4><i class="material-icons">assistant</i>帮助我们</h4>
+    <div class="card">
+        <div class="card-content">
+            <p>我们刚刚起步，非常渴望大家的帮助，把善意传递下去。您可以通过下面几种方式帮助我们</p>
+        </div>
+        <div class="card-tabs">
+            <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#help1" class="active">公众号</a></li>
+                <li class="tab"><a href="#help2">小额捐助</a></li>
+                <li class="tab"><a href="#help3">志愿者</a></li>
+            </ul>
+        </div>
+        <div class="card-content grey lighten-4">
+            <div id="help1">
+                <div class="row">
+                    <div class="col s12 m4 l4 offset-l4 offset-m4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                              src="{{url_for('static', filename='imgs/QR.jpg')}}">
+                            </div>
+                            <div class="card-content"><span
+                                    class="card-title activator grey-text text-darken-4">关注归家网公众号<i
+                                    class="material-icons right">more_vert</i></span>
+                                <p>更方便地上传比对图片，获取最新的紧急发布</p>
+                                <p class="click_for_detail">点击图片查看详情</p>
+                            </div>
+                            <div class="card-reveal"><span class="card-title grey-text text-darken-4">关注归家网公众号<i
+                                    class="material-icons right">close</i></span>
+                                <p>更方便地上传比对图片</p>
+                                <p>获取最新的紧急发布</p>
+                                <p>更多功能开发中</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="help2">
+                <div class="row">
+
+                    <div class="col s12 m6 l4 offset-l2">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img class="activator" src="{{url_for('static', filename='imgs/doanteWechat.png')}}">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">通过微信捐赠<i
+                                        class="material-icons right">more_vert</i></span>
+                                <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
+                                <p class="click_for_detail">点击图片查看详情</p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">通过微信捐赠<i class="material-icons right">close</i></span>
+                                <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
+                                <p>
+                                    您一笔五毛钱的捐款可以：
+                                </p>
+                                <ul class="collection">
+                                    <li class="collection-item">
+                                        租用服务器15小时
+                                    </li>
+                                    <li class="collection-item">
+                                        租用域名3天
+                                    </li>
+                                    <li class="collection-item">
+                                        为比对数据库增加1000条记录
+                                    </li>
+
+                                    <li class="collection-item">
+                                        调用人脸比对接口1000次
+                                    </li>
+                                    <li class="collection-item">
+                                        核实1～2条走失信息
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img class="activator" src="{{url_for('static', filename='imgs/doanteAli.jpg')}}">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">通过支付宝捐赠<i
+                                        class="material-icons right">more_vert</i></span>
+                                <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
+                                <p class="click_for_detail">点击图片查看详情</p></div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">通过支付宝捐赠<i class="material-icons right">close</i></span>
+                                <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
+                                <p>
+                                    您一笔五毛钱的捐款可以：
+                                </p>
+                                <ul class="collection">
+                                    <li class="collection-item">
+                                        租用服务器15小时
+                                    </li>
+                                    <li class="collection-item">
+                                        租用域名3天
+                                    </li>
+                                    <li class="collection-item">
+                                        为比对数据库增加1000条记录
+                                    </li>
+
+                                    <li class="collection-item">
+                                        调用人脸比对接口1000次
+                                    </li>
+                                    <li class="collection-item">
+                                        核实1～2条走失信息
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="help3">
+                <div class="row">
+                    <div class="col s12 m4 l4 offset-l2 offset-m2">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                              src="{{url_for('static', filename='imgs/market.png')}}">
+                            </div>
+                            <div class="card-content"><span
+                                    class="card-title activator grey-text text-darken-4">推广志愿者<i
+                                    class="material-icons right">more_vert</i></span>
+                                <p>如果您对推广运营很熟悉或感兴趣，并热心于公益，请加入....</p>
+                                <p class="click_for_detail">点击图片查看详情</p>
+                            </div>
+                            <div class="card-reveal"><span class="card-title grey-text text-darken-4">推广志愿者<i
+                                    class="material-icons right">close</i></span>
+                                <p>如果您对推广运营公众号或网站很熟悉或感兴趣，并热心于公益，请加入我们</p>
+                                <form class="col s12">
+                                    <div class="row">
+                                        <div class="input-field  ">
+                                            <input id="design_name" type="text" class="validate">
+                                            <label for="design_name">姓名</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field   ">
+                                            <textarea id="design_comment" class="materialize-textarea"></textarea>
+                                            <label for="design_comment">描述</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="file-field input-field   ">
+                                            <div class="btn">
+                                                <span>任何作品，简历，图片...</span>
+                                                <input type="file" id="design_image">
+                                            </div>
+                                            <div class="file-path-wrapper ">
+                                                <input class="file-path validate" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field   ">
+                                            <input id="design_phone" type="tel" class="validate">
+                                            <label for="design_phone">联系人电话</label>
+                                        </div>
+                                    </div>
+                                </form>
+                                <button class="btn waves-effect waves-light" type="submit" name="action">提交
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light"><img class="activator"
+                                                                                              src="{{url_for('static', filename='imgs/design.png')}}">
+                            </div>
+                            <div class="card-content"><span
+                                    class="card-title activator grey-text text-darken-4">设计志愿者<i
+                                    class="material-icons right">more_vert</i></span>
+                                <p>如果您有设计方面的才华，并热心于公益，请加入....</p>
+                                <p class="click_for_detail">点击图片查看详情</p>
+
+                            </div>
+                            <div class="card-reveal"><span class="card-title grey-text text-darken-4">设计志愿者<i
+                                    class="material-icons right">close</i></span>
+                                <p>如果您有设计方面的才华，并热心于公益，请加入我们</p>
+                                <form class="col s12">
+                                    <div class="row">
+                                        <div class="input-field   ">
+                                            <input id="market_name" type="text" class="validate">
+                                            <label for="market_name">姓名</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field   ">
+                                            <textarea id="market_comment" class="materialize-textarea"></textarea>
+                                            <label for="market_comment">描述</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="file-field input-field   ">
+                                            <div class="btn">
+                                                <span>任何作品，简历，图片...</span>
+                                                <input type="file" id="market_image">
+                                            </div>
+                                            <div class="file-path-wrapper ">
+                                                <input class="file-path validate" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field   ">
+                                            <input id="market_phone" type="tel" class="validate">
+                                            <label for="market_phone">联系人电话</label>
+                                        </div>
+                                    </div>
+                                </form>
+                                <button class="btn waves-effect waves-light" type="submit" name="action">提交
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <h4><i class="material-icons">cloud_upload</i>发布信息<span><p class="more">详情</p></span></h4>
+    <div class="card">
+        <div class="card-content">
+            <p>您可以发布走失信息，我们人工审核后将把您的信息录入数据库并发布，让更多人帮助您找回家人</p>
+            <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header"><i class="material-icons right">menu</i>发布信息</div>
+                    <div class="collapsible-body">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="lost_name" type="text" class="validate">
+                                    <label for="lost_name">走失人姓名</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <select id="gender" name="gender">
+                                        <option value="" disabled selected>走失人性别</option>
+                                        <option value="male">男</option>
+                                        <option value="female">女</option>
+                                    </select>
+                                    <label for="gender">性别</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <label for="birthday">生日</label>
+                                    <input id="birthday" type="date" class="datepicker">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <label for="lost_date">走失日期</label>
+                                    <input id="lost_date" type="date" class="datepicker">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="home_loc_province" type="text" class="validate">
+
+                                    <label for="home_loc_province">户籍地 省</label>
+                                </div>
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="home_loc_city" type="text" class="validate">
+
+                                    <label for="home_loc_city">市</label>
+                                </div>
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="home_loc_town" type="text" class="validate">
+
+                                    <label for="home_loc_town">区县街道</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="lost_loc_province" type="text" class="validate">
+
+                                    <label for="lost_loc_province">走失地 省</label>
+                                </div>
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="lost_loc_city" type="text" class="validate">
+
+                                    <label for="lost_loc_city">市</label>
+                                </div>
+                                <div class="input-field col s2 m2 l2">
+                                    <input id="lost_loc_town" type="text" class="validate">
+
+                                    <label for="lost_loc_town">区县街道</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <label>身高（厘米）</label><br>
+                                    <p class="range-field">
+                                        <input type="range" id="height" min="10" max="250" class="validate"/>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <textarea id="comment" class="materialize-textarea"></textarea>
+                                    <label for="comment">描述</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="file-field input-field col s6">
+                                    <div class="btn">
+                                        <span>走失人头像</span>
+                                        <input type="file" id="image">
+                                    </div>
+                                    <div class="file-path-wrapper ">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="contact_name" type="text" class="validate">
+                                    <label for="contact_name">联系人姓名</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="contact_phone" type="tel" class="validate">
+                                    <label for="contact_phone">联系人电话</label>
+                                </div>
+                            </div>
+                        </form>
+                        <button class="btn waves-effect waves-light" type="submit" name="action">发布信息
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <h4><i class="material-icons">sentiment_very_satisfied</i>夕阳徽章<span><p class="more">更多</p></span></h4>
+    <div class="card">
+        <div class="card-content">
+            <p>待开发.....</p>
+        </div>
     </div>
 </div>
-{% endblock %} 
-{% block script %}
-var goalname=''<!-- 全局变量获取内容的题目，以供模板form,ajax使用 -->
-$('#home').addClass('active')
-{% include 'form.js' %}<!-- 处理表单的表达 -->
-{% include 'ajax.js' %}<!-- 表单的ajax -->
-
 {% endblock %}

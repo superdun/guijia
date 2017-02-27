@@ -43,83 +43,53 @@ class User(db.Model):
         return '<User %r>' % self.name
 
 
-# Flask-Admin can't create model if it has constructor with non-default parameters
-
-
-class Post(db.Model):
+class Missingchildren(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    content = db.Column(db.String(2000))
-    create_at = db.Column(db.String(255))
-    img = db.Column(db.String(120))
-    view_count = db.Column(db.Integer)
-    summary = db.Column(db.String(255))
-    category = db.Column(db.String(120))
-    book_count = db.Column(db.Integer)
-    max_book_count = db.Column(db.Integer)
-    status = db.Column(db.String(120))
-    is_full = db.Column(db.String(120))
+    bid = db.Column(db.String(1200))
+    image = db.Column(db.String(1200))
+    name = db.Column(db.String(1200))
+    gender = db.Column(db.String(1200))
+    birthday = db.Column(db.String(1200))
+    height = db.Column(db.String(1200))
+    missing_time = db.Column(db.String(1200))
+    source = db.Column(db.String(1200))
+    c_name = db.Column(db.String(1200))
+    c_tel = db.Column(db.String(1200))
+    confirm_location = db.Column(db.String(1200))
+    missing_location_province = db.Column(db.String(1200))
+    missing_location_city = db.Column(db.String(1200))
+    missing_location_town = db.Column(db.String(1200))
+    description = db.Column(db.String(1200))
+    comment = db.Column(db.String(1200))
+    login_time = db.Column(db.String(1200))
+    created_at = db.Column(db.String(1200))
+    volunteer = db.Column(db.String(1200))
+    status = db.Column(db.String(1200))
 
-    def __init__(self, title='', content='', img='', view_count=0, summary='', category='', book_count=0,
-                 max_book_count=0, status='', is_full='no'):
-        self.title = title
-        self.content = content
-        self.create_at = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-        self.img = img
-        self.view_count = view_count
-        self.summary = summary
-        self.category = category
-        self.book_count = book_count
-        self.max_book_count = max_book_count
-        self.status = status
-        self.is_full = is_full
-
-    def __repr__(self):
-        return '<post %r>' % self.title
-
-
-class Carousel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.String(80))
-    title = db.Column(db.String(120))
-    content = db.Column(db.String(120))
-
-    def __init__(self, img='', title=1, content=''):
-        self.img = img
-        self.title = title
-        self.content = content
-
-    def __repr__(self):
-        return '<Carousel %r>' % self.title
-
-
-class Face(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    grade = db.Column(db.String(120))
-    eye = db.Column(db.String(120))
-    nose = db.Column(db.String(120))
-    mouth = db.Column(db.String(120))
-    chin = db.Column(db.String(120))
-    feel = db.Column(db.String(120))
-    gender = db.Column(db.String(120))
-    age = db.Column(db.Integer)
-    comment = db.Column(db.String(520))
-    sourceImg = db.Column(db.String(120))
-    resultImg = db.Column(db.String(120))
-
-    def __init__(self, grade='0', age=0, eye='0', gender='Male', mouth='0', chin='0', feel='0', nose='0', comment='',
-                 sourceImg='', resultImg=''):
-        self.grade = grade
-        self.eye = eye
-        self.mouth = mouth
-        self.chin = chin
-        self.feel = feel
-        self.nose = nose
-        self.age = age
+    def __init__(self, bid='', image='', name='', gender='', birthday='', height='', missing_time='', source='',
+                 c_name='', c_tel='', confirm_location='', missing_location_province='',
+                 missing_location_city='', missing_location_town='', description='', comment='', login_time='',
+                 volunteer='', status='open'):
+        self.bid = bid
+        self.image = image
+        self.name = name
         self.gender = gender
+        self.birthday = birthday
+        self.height = height
+        self.missing_time = missing_time
+        self.source = source
+        self.c_name = c_name
+        self.c_tel = c_tel
+        self.confirm_location = confirm_location
+        self.missing_location_province = missing_location_province
+        self.missing_location_city = missing_location_city
+        self.missing_location_town = missing_location_town
+        self.description = description
         self.comment = comment
-        self.resultImg = resultImg
-        self.sourceImg = sourceImg
+        self.login_time = login_time
+        self.created_at = time.time()
+        self.volunteer = volunteer
+        self.status = status
 
     def __repr__(self):
-        return '<Face %r>' % self.grade
+        return '<MissingChildren %r>' % self.name

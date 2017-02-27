@@ -1,0 +1,21 @@
+
+.container {
+    width: 70%;
+}
+
+body > div.container{
+    border: 20px;
+}
+.more{
+    font-size: medium;
+    float: right;
+}
+.card .card-content  .click_for_detail{
+    color: #ee6e73;
+}
+.btn, .btn-large{
+    background-color:#ee6e73;
+}
+.preview_img{
+    height:100px;
+}

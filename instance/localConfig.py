@@ -1,7 +1,7 @@
 from flask import Flask
 
 
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:password@localhost:3306/mywebsite'
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:password@localhost:3306/guijia'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = '123456'
 
@@ -10,11 +10,7 @@ QINIU_SECRET_KEY = 'QN3dDZvbX5MdDxfWsf4vua774Wz_5JFCZP78PGTU'
 QINIU_BUCKET_NAME = 'makerimg'
 QINIU_BUCKET_DOMAIN = 'oc1is8h9w.bkt.clouddn.com'
 
-MAIL_SERVER = 'smtp.163.com'
-MAIL_PORT = 465
-MAIL_USE_SSL = True
-MAIL_USERNAME = 'ecust_maker@163.com'
-MAIL_PASSWORD = 'ecustmaker1'
+
 
 WECHAT_TOKEN = 'weixin'
 WECHAT_APPID = 'wx684db814d4ca03c7'
@@ -24,11 +20,7 @@ WECHAT_ENC_MODE = 'normal'
 ONENET_API_DEVICE = {'bathroom': 3227278}
 ONENET_API_KEY = 'txhCzJ9NX7iORS9RwYHEdfpTck0='
 
-TULING_URL_API = "http://www.tuling123.com/openapi/api"
-TULING_APIKEY = "84fd4d2eb37c435aaf08e9e9f127b6ea"
-TULING_SECRET = "96b0292589c89729"
 
 FACE_KEY = "ZfZkvZVgtmq023KgiYjj8zYp-eGmG-wJ"
 FACE_API_KEY = "F2pl2jjyeTtSFPIllQ-MCF9HT2DPqRv5"
-#REDIS_URL = "redis://superdun:1786e7e78a4cc86cba72c38edf4fc33f@50.30.35.9:3616/"
-REDIS_URL ='redis://@127.0.0.1:6379/'
+

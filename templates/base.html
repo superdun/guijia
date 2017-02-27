@@ -1,161 +1,65 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ecust Maker Space</title>
-  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet"></head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.cnpmjs.org/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/materialize.min.css')}}" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
 
 <body>
-  <div class="navbar-wrapper">
-    <div class="container-fluid">
-      <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <img src="{{url_for('static', filename='LOGO.jpg')}}" class='navbar-brand'> <strong class="navbar-brand">华理创客空间</strong>
-          </div>
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li id='home'>
-                <a href="{{url_for('index')}}">
-                  HOME
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li id='show_works'>
-                <a href="{{url_for('show_works')}}">作品展示</a>
-              </li>
-              <li id='apply'>
-                <a href="{{url_for('apply')}}">活动报名</a>
-              </li>
-              <li id='book_tools'>
-                <a href="{{url_for('book_tools')}}">仪器预约</a>
-              </li>
-              <li id='our_cool'>
-                <a href="{{url_for('our_cool')}}">组织风采</a>
-              </li>
-              <li id='iot'>
-                <a href="{{url_for('iot')}}">伊卡斯特物联网平台</a>
-              </li>              
-              <li class="dropdown" id='dropdown_menu'>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                  aria-haspopup="true" aria-expanded="false">
-                  嘘...私货
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="{{url_for('stationmaster')}}">找我玩？</a>
-                  </li>
+<nav>
+    <div class="nav-wrapper container">
+        <a href="#" class="brand-logo"><i class="material-icons">home</i>归家网</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="{{url_for('comparison')}}">照片识别</a></li>
+            <li><a href="{{url_for('emergencyList')}}">紧急发布</a></li>
+            <li><a href="{{url_for('disappearanceList')}}">走失信息</a></li>
+            <li><a href="{{url_for('issuance')}}">发布信息</a></li>
+        </ul>
+    </div>
+</nav>
 
-                  <li>
-                    <a disabled='disabled'>Some DEMOs:</a>
-                  </li>
-
-                  <li role="separator" class="divider"></li>
-
-                  <li>
-                    <a href="{{url_for('marysue')}}">玛丽苏起名器</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('spacebattle')}}">空战</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('eros')}}">俄罗斯方块</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('refine')}}">精馏计算软件</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('dragonboat')}}">划龙舟</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('fiveson')}}">五子棋</a>
-                  </li>
-                  <li>
-                    <a href="{{url_for('mosquito')}}">打蚊子</a>
-                  </li>
+{% block content %}{% endblock %}
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">联系我们</h5>
+                <div class="col l3 m4 s12">
+                    <h6 class="white-text">微信</h6>
+                    <img src="{{url_for('static', filename='imgs/myQR.jpg')}}" class="responsive-img" />
+                </div>
+                <div class="col l3 m4 s12">
+                    <h6 class="white-text">QQ</h6>
+                    <img src="{{url_for('static', filename='imgs/myQRQQ.jpg')}}" class="responsive-img"/>
+                </div>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">相关链接</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="http://www.baobeihuijia.com/">宝贝回家</a></li>
+                    <li><a class="grey-text text-lighten-3" href="http://www.zgxrw.net/">寻人网</a></li>
+                    <li><a class="grey-text text-lighten-3" href="http://tv.cctv.com/lm/dzw/">CCTV等着我</a></li>
                 </ul>
-              </li>
-              <li id='our_cool'>
-                <a href="/login">管理员登录</a>
-              </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-lg join" data-toggle="modal"
-                  data-target="#myModal" id='123'>加入我们</button>
-              </li>
-            </ul>
-          </div>
-          <!-- /.navbar-collapse --> </div>
-        <!-- /.container-fluid --> </nav>
-    </div>
-  </div>
-  <div class="navbar-wrapper">
-    <nav class="navbar navbar-default"></nav>
-    <!--防止导航条置顶影响下面的部分--> </div>
-  <div class='container' id='content'>{% block content %} {% endblock %}</div>
-  <!-- Modal 务必将模态框的 HTML 代码放在文档的最高层级内（也就是说，尽量作为 body 标签的直接子元素），以避免其他组件影响模态框的展现和/或功能。-->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title" id="myModalLabel">想加入华理创客空间？</h4>
+            </div>
         </div>
-        <div class="modal-body">
-          <p id='inform_show'>非常简单！填写姓名与联系方式，我们会尽快联系您！</p>
-          <form id='join_in'>
-            <div class="form-group">
-              <label for="recipient-name" class="control-label">姓名:</label>
-              <input type="text" class="form-control" id="recipient-name" autofocus='autofocus'></div>
-            <div class="form-group">
-              <label for="message-text" class="control-label">手机号码/微信号:</label>
-              <input class="form-control" type='tel' id="phone-number"></input>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id='cancel_join_btn'>再考虑一下</button>
-        <button type="button" class="btn btn-primary" onclick='post_join_inform()'
-            id='confirm_join_btn'>提交吧</button>
-      </div>
     </div>
-  </div>
-</div>
-<footer class='footer'>
-  <div class='container'>
-    <p>
-      友情链接：
-      <a href='http://www.join-inedu.com/'>卓因青少年创客工厂</a>
-    </p>
-  </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Made By Dun
+            <a class="grey-text text-lighten-4 right" href="mailto:475098936@qq.com"><i class="Tiny material-icons">email</i>
+                475098936@qq.com</a>
+        </div>
+    </div>
 </footer>
-<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-<script>
-  {% block script %}
-  {% endblock %}
-  
-
-  </script>
-
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/materialize.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/main.js')}}"></script>
 </body>
-
 </html>

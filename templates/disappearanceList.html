@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h3 class="page_title">走失信息</h3>
+        <h5>本模块数据来源于<a href="http://www.baobeihuijia.com/list.aspx?tid=1">宝贝回家</a>网站，侵权立删</h5>
+        <div class="col s12 m12 l12 z-depth-2">
+            <div class="row ">
+                {% for item in items %}
+                <div class="col s12 m4 l4">
+
+                    <div class="card">
+                        {% if item.source =='baobeihuijia' or item.source =='' %}
+                        <div class="card-image waves-effect waves-block waves-light"><img class="activator preview_img"
+                                                                                          src="{{ bbhj_img_domain }}{{ item.image }}">
+                        </div>
+                        {% else %}
+                        <div class="card-image waves-effect waves-block waves-light"><img class="activator preview_img"
+                                                                                          src="{{ local_img_domain }}{{ item.image }}">
+                            {% endif %}
+                            <div class="card-content"><span
+                                    class="card-title activator grey-text text-darken-4">{{ item.name }}<i
+                                    class="material-icons right">more_vert</i></span>
+
+                                <p class="click_for_detail">点击图片查看详情</p>
+
+                            </div>
+                            <div class="card-reveal"><span class="card-title grey-text text-darken-4">{{ item.name }}<i
+                                    class="material-icons right">close</i></span>
+                                <ul class="collection">
+                                    <li class="collection-item">失踪地：{{ item.missing_location_province}}{{
+                                        item.missing_location_city}}{{
+                                        item.missing_location_town }}
+                                    </li>
+                                    <li class="collection-item">身高：{{ item.height}}</li>
+                                    <li class="collection-item">失踪日期：{{ item.missing_time }}</li>
+                                    <li class="collection-item">描述：{{ item.description }}</li>
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                    {{ pagination.links }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
