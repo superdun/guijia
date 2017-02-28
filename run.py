@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
-from dbORM import db, User,Missingchildren
+from dbORM import db, User, Missingchildren
 import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
 import flask_login
 from moduleWechat import wechat_resp
-from flask_paginate import Pagination,get_page_args
+from flask_paginate import Pagination, get_page_args
 from werkzeug import secure_filename
 from faceModule import detect
-#
+import time
 
 # debug in wsgi
 # from werkzeug.debug import DebuggedApplication
@@ -23,41 +23,81 @@ application = app
 
 
 @app.route('/')
-def index( thumbnail=''):
+def index(thumbnail=''):
 
     return render_template('index.html')
 
+@app.route('/api/mapData')
+def mapDataApi():
+    curTime = time.time()
+    bbhj_img_domain = app.config.get('BAOBEIHUIJIA_PREVIEW_IMG_DOMAIN')
+    local_img_domain = QINIU_DOMAIN
+    base_url ='disappearance/'
+    todayTime = curTime - curTime % 86400
+    items = Missingchildren.query.filter(Missingchildren.created_at >= todayTime).filter(
+        Missingchildren.status == 'open').all()
+    results = {}
+    for i in items:
+        if u'内蒙古' in i.missing_location_province:
+            province=u'内蒙古'
+        elif len(i.missing_location_province)<2:
+            continue
+        else:
+            province = i.missing_location_province[:2]
+        if province in results.keys():
+            results[province]['count'] += 1
+        else:
+            if i.source=='baobeihuijia':
+                img_url=bbhj_img_domain+i.image
+            else:
+                img_url=local_img_domain+i.image
+            results[province] = {"name": province, "count": 0, "tooltip": "<a href='%s'><b><font size='15' color='#238B45'>%s</font></b></a><br>%s<br><img src='%s' width='150'/>"%(base_url+str(i.id),i.short_name,i.description[:10]+'...',img_url)}
+    for j in results.values():
+        j['tooltip'] = (u"<font size='15' color='#238A45'>%s</font>最新动态：<br>" % (j['name'] + u':' + str(j['count']) + u'个<br>')) + \
+                       j['tooltip']
+
+    return jsonify(results.values())
+@app.route('/api/idcode', methods=['POST'])
+def idcodeApi():
+    print request.form['phone']
+    return jsonify({'status':'ok'})
+
 @app.route('/emergency')
 def emergencyList():
-
     return render_template('emergencyList.html')
+
+
 @app.route('/disappearance')
 def disappearanceList():
     bbhj_img_domain = app.config.get('BAOBEIHUIJIA_PREVIEW_IMG_DOMAIN')
     local_img_domain = QINIU_DOMAIN
     page, per_page, offset = get_page_args()
     per_page = app.config.get('PER_PAGE')
-    items = Missingchildren.query.filter(Missingchildren.status == 'open').order_by('id desc').offset(offset).limit(per_page).all()
+    items = Missingchildren.query.filter(Missingchildren.status == 'open').order_by('id desc').offset(offset).limit(
+        per_page).all()
     print len(items)
     pagination = Pagination(page=page, total=len(items))
-    return render_template('disappearanceList.html',items=items,pagination=pagination,bbhj_img_domain=bbhj_img_domain,local_img_domain=local_img_domain)
+    return render_template('disappearanceList.html', items=items, pagination=pagination,
+                           bbhj_img_domain=bbhj_img_domain, local_img_domain=local_img_domain)
+
+
 @app.route('/disappearance/<disappearanceId>')
 def disappearanceDetail(disappearanceId):
     bbhj_img_domain = app.config.get('BAOBEIHUIJIA_IMG_DOMAIN')
     local_img_domain = QINIU_DOMAIN
     item = Missingchildren.query.filter(Missingchildren.id == disappearanceId).first()
-    return render_template('disappearanceDetail.html',item=item,bbhj_img_domain=bbhj_img_domain,local_img_domain=local_img_domain)
+    return render_template('disappearanceDetail.html', item=item, bbhj_img_domain=bbhj_img_domain,
+                           local_img_domain=local_img_domain)
+
 
 @app.route('/comparison')
 def comparison():
     return render_template('comparisonList.html')
+
+
 @app.route('/issuance')
 def issuance():
     return render_template('issuanceList.html')
-
-
-
-
 
 
 @app.route('/post/<postId>')
@@ -66,7 +106,6 @@ def post(postId):
     item.view_count = item.view_count + 1
     db.session.commit()
     return render_template('post.html', item=item)
-
 
 
 @app.route('/wechat', methods=['GET', 'POST'])
@@ -83,6 +122,7 @@ def iot_bath_temp():
     return wechat_resp(token, appid, appsecret,
                        encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
 
+
 @app.route('/wechat', methods=['GET', 'POST'])
 def wechat():
     token = app.config.get('WECHAT_TOKEN')
@@ -98,6 +138,7 @@ def wechat():
     return request.args.get('echostr')
     # return wechat_resp(token, appid, appsecret,
     #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+
 
 @app.route('/admin/upload', methods=['POST'])
 def upload():
@@ -160,7 +201,6 @@ def face():
 
 @app.route('/randomchat', methods=['GET', 'POST'])
 def randomChat():
-
     waitingRoom = redis_store.get('waitingRoom')
 
     if not waitingRoom or waitingRoom == '':
@@ -185,17 +225,20 @@ def randomChat():
         redis_store.set(room, "{\"A\":{\"count\":0,\"detail\":\"\"},\"B\":{\"count\":0,\"detail\":\"\"}}")
         return render_template('randomchat/chat.html', room=room, name=name)
 
+
 @app.route('/randomchat/index')
 def randomChatIndex():
-    if request.args.get('room', '')==redis_store.get('waitingRoom').split(':')[0]:
+    if request.args.get('room', '') == redis_store.get('waitingRoom').split(':')[0]:
         redis_store.set('waitingRoom', '')
     return redirect(url_for('randomChat'))
 
+
 @app.route('/randomchat/getinform')
 def getChatInform():
-    if request.args.get('room', '')==redis_store.get('waitingRoom').split(':')[0]:
+    if request.args.get('room', '') == redis_store.get('waitingRoom').split(':')[0]:
         redis_store.set('waitingRoom', '')
     return redirect(url_for('randomChat'))
+
 
 @app.route("/robots.txt")
 def robots_txt():
@@ -214,7 +257,6 @@ def google_verify():
 
 # admin
 admin.dashboard()
-
 
 app.debug = True
 if __name__ == '__main__':

@@ -78,6 +78,10 @@ def baseRecord():
                 missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[0]
                 missing_location_city = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[1]
                 missing_location_town = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[-1]
+            elif len(dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省'))>1:
+                missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[0]+u'省'
+                missing_location_city = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[-1].split(u'市')[0]+u'室'
+                missing_location_town = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[-1].split(u'市')[-1]
             else:
                 missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[0]
                 missing_location_city = ''
@@ -148,6 +152,10 @@ def addRecord():
                 missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[0]
                 missing_location_city = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[1]
                 missing_location_town = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[-1]
+            elif len(dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省'))>1:
+                missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[0]+u'省'
+                missing_location_city = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[-1].split(u'市')[0]+u'室'
+                missing_location_town = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(u'省')[-1].split(u'市')[-1]
             else:
                 missing_location_province = dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')[0]
                 missing_location_city = ''
@@ -193,5 +201,5 @@ def addRecord():
                 session.add(newChild)
                 session.commit()
                 print '+1'
-# addRecord()
-baseRecord()
+addRecord()
+#baseRecord()

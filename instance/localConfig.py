@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 
 
@@ -24,3 +25,7 @@ ONENET_API_KEY = 'txhCzJ9NX7iORS9RwYHEdfpTck0='
 FACE_KEY = "ZfZkvZVgtmq023KgiYjj8zYp-eGmG-wJ"
 FACE_API_KEY = "F2pl2jjyeTtSFPIllQ-MCF9HT2DPqRv5"
 
+SMS_ACCESS_KEY = 'LTAIUOngdXDC5UZG'
+SMS_SIGN_NAME = u'归家网'
+SMS_MODEL_CODE = 'SMS_50170185'
+SMS_ACCESS_SECRET ='OJrsCzzMOZSIzbnhplwQO1krfgRNnF'

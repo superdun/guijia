@@ -1,62 +1,69 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <h4><i class="material-icons">error_outline</i>紧急发布<span><a href="#" class="more">更多</a></span></h4>
+    <h4><i class="material-icons">error_outline</i>今日发布<span><a href="#" class="more">更多</a></span></h4>
     <div class="divider"></div>
     <div class="row">
-        <div class="col s12 m6 l3">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
-                                                                                  src="http://materializecss.com/images/office.jpg">
-                </div>
-                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
-                        class="material-icons right">more_vert</i></span>
-                    <p><a href="#">查看详情</a></p></div>
-                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
-                        class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
-            </div>
-        </div>
-        <div class="col s12 m6 l3">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
-                                                                                  src="http://materializecss.com/images/office.jpg">
-                </div>
-                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
-                        class="material-icons right">more_vert</i></span>
-                    <p><a href="#">查看详情</a></p></div>
-                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
-                        class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
-            </div>
-        </div>
-        <div class="col s12 m6 l3">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="http://materializecss.com/images/office.jpg">
-                </div>
-                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
-                        class="material-icons right">more_vert</i></span>
-                    <p><a href="#">查看详情</a></p></div>
-                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
-                        class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
-            </div>
-        </div>
-        <div class="col s12 m6 l3">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light"><img class="activator"
-                                                                                  src="http://materializecss.com/images/office.jpg">
-                </div>
-                <div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i
-                        class="material-icons right">more_vert</i></span>
-                    <p><a href="#">查看详情</a></p></div>
-                <div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i
-                        class="material-icons right">close</i></span>
-                    <p>Here is some more information about this product that is only revealed once clicked on.</p></div>
-            </div>
+        <div id='myMap' class="col s12" style="height: 650px;">
+
         </div>
     </div>
+    <!--<h4><i class="material-icons">error_outline</i>紧急发布<span><a href="#" class="more">更多</a></span></h4>-->
+    <!--<div class="divider"></div>-->
+    <!--<div class="row">-->
+    <!--<div class="col s12 m6 l3">-->
+    <!--<div class="card">-->
+    <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
+    <!--src="http://materializecss.com/images/office.jpg">-->
+    <!--</div>-->
+    <!--<div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">more_vert</i></span>-->
+    <!--<p><a href="#">查看详情</a></p></div>-->
+    <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">close</i></span>-->
+    <!--<p>Here is some more information about this product that is only revealed once clicked on.</p></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col s12 m6 l3">-->
+    <!--<div class="card">-->
+    <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
+    <!--src="http://materializecss.com/images/office.jpg">-->
+    <!--</div>-->
+    <!--<div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">more_vert</i></span>-->
+    <!--<p><a href="#">查看详情</a></p></div>-->
+    <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">close</i></span>-->
+    <!--<p>Here is some more information about this product that is only revealed once clicked on.</p></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col s12 m6 l3">-->
+    <!--<div class="card">-->
+    <!--<div class="card-image waves-effect waves-block waves-light">-->
+    <!--<img class="activator" src="http://materializecss.com/images/office.jpg">-->
+    <!--</div>-->
+    <!--<div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">more_vert</i></span>-->
+    <!--<p><a href="#">查看详情</a></p></div>-->
+    <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">close</i></span>-->
+    <!--<p>Here is some more information about this product that is only revealed once clicked on.</p></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col s12 m6 l3">-->
+    <!--<div class="card">-->
+    <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
+    <!--src="http://materializecss.com/images/office.jpg">-->
+    <!--</div>-->
+    <!--<div class="card-content"><span class="card-title activator grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">more_vert</i></span>-->
+    <!--<p><a href="#">查看详情</a></p></div>-->
+    <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">Card Title<i-->
+    <!--class="material-icons right">close</i></span>-->
+    <!--<p>Here is some more information about this product that is only revealed once clicked on.</p></div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
     <div class="divider"></div>
     <h4><i class="material-icons">photo_library</i>疑似照片在线识别<span><a href="#" class="more">更多</a></span></h4>
     <div class="card">
@@ -69,7 +76,7 @@
                 <li class="tab"><a class="active" href="#test5">网页</a></li>
             </ul>
         </div>
-        <div class="card-content grey lighten-4">
+        <div class="card-content theme_color">
             <div id="test4"><img class="responsive-img" src="http://materializecss.com/images/office.jpg"></div>
             <div id="test5"><img class="responsive-img" src="http://materializecss.com/images/office.jpg"></div>
         </div>
@@ -87,7 +94,7 @@
                 <li class="tab"><a href="#help3">志愿者</a></li>
             </ul>
         </div>
-        <div class="card-content grey lighten-4">
+        <div class="card-content theme_color">
             <div id="help1">
                 <div class="row">
                     <div class="col s12 m6 l4 offset-l4 offset-m3">
@@ -117,7 +124,8 @@
                     <div class="col s12 m6 l4 offset-l2">
                         <div class="card">
                             <div class="card-image waves-effect waves-block waves-light">
-                                <img class="activator" src="{{url_for('static', filename='imgs/doanteWechat.png')}}">
+                                <img class="activator"
+                                     src="{{url_for('static', filename='imgs/doanteWechat.png')}}">
                             </div>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">通过微信捐赠<i
@@ -126,7 +134,8 @@
                                 <p class="click_for_detail">点击图片查看详情</p>
                             </div>
                             <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">通过微信捐赠<i class="material-icons right">close</i></span>
+                                    <span class="card-title grey-text text-darken-4">通过微信捐赠<i
+                                            class="material-icons right">close</i></span>
                                 <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
                                 <p>
                                     您一笔五毛钱的捐款可以：
@@ -163,7 +172,8 @@
                                 <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
                                 <p class="click_for_detail">点击图片查看详情</p></div>
                             <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">通过支付宝捐赠<i class="material-icons right">close</i></span>
+                                    <span class="card-title grey-text text-darken-4">通过支付宝捐赠<i
+                                            class="material-icons right">close</i></span>
                                 <p>网站为个人公益性质，没有任何资金来源支付成本.您的捐赠将被用来建设归家网，帮助更多人回家</p>
                                 <p>
                                     您一笔五毛钱的捐款可以：
@@ -234,9 +244,21 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="input-field   ">
+                                        <div class="input-field   col s10">
                                             <input id="design_phone" type="tel" class="validate">
                                             <label for="design_phone">联系人电话</label>
+                                        </div>
+                                        <div class="col s2">
+                                            <a class="btn-floating btn-small red" style="text-align: center"
+                                               id="getIdCode3">
+                                                验证
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <input id="idCode3" type="number" class="validate">
+                                            <label for="idCode3" id="idCodeLable3">短信验证码</label>
                                         </div>
                                     </div>
                                 </form>
@@ -288,9 +310,21 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="input-field   ">
+                                        <div class="input-field   col s10">
                                             <input id="market_phone" type="tel" class="validate">
                                             <label for="market_phone">联系人电话</label>
+                                        </div>
+                                        <div class="col s2">
+                                            <a class="btn-floating btn-small red" style="text-align: center"
+                                               id="getIdCode2">
+                                                验证
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <input id="idCode2" type="number" class="validate">
+                                            <label for="idCode2" id="idCodeLable2">短信验证码</label>
                                         </div>
                                     </div>
                                 </form>
@@ -410,9 +444,20 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s5">
                                     <input id="contact_phone" type="tel" class="validate">
                                     <label for="contact_phone">联系人电话</label>
+
+                                </div>
+                                <div class="col s2">
+                                    <a class="btn-floating btn-middle red" style="text-align: center" id="getIdCode1">
+                                        验证</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="idCode1" type="number" class="validate">
+                                    <label for="idCode1" id="idCodeLable1">短信验证码</label>
                                 </div>
                             </div>
                         </form>
@@ -432,4 +477,19 @@
         </div>
     </div>
 </div>
+<div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src='http://dev.dituhui.com/sdk/1.0.0/js/dituhui-flash.js'></script>
+<script src='http://dev.dituhui.com/sdk/1.0.0/js/dituhui-flash.js'></script>
+<script src="{{url_for('static', filename='js/map.js')}}"></script>
+<script src='http://dev.dituhui.com/sdk/1.0.0/js/sample-data.js'></script>
 {% endblock %}
