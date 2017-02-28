@@ -5,10 +5,10 @@ var IdCode = {
 
     getIdCode: function (phone) {
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: "api/idcode",
             dataType: 'json',
-            data:{phone:phone},
+            data: {phone: phone},
             success: function (result) {
                 $(IdCode.targetButton).attr('disabled', 'true');
                 IdCode.time = 10;
@@ -20,10 +20,11 @@ var IdCode = {
     refreshTime: function () {
         IdCode.time -= 1;
         console.log(IdCode.time);
-        $(IdCode.targetLable).text(IdCode.time+"秒后可重新获取");
+        $(IdCode.targetLable).text(IdCode.time + "秒后可重新获取");
         if (IdCode.time == 0) {
             clearInterval(IdCode.timer);
             $(IdCode.targetButton).removeAttr('disabled')
+            $(IdCode.targetLable).text("输入验证码");
         }
     }
 };
@@ -42,7 +43,7 @@ $(document).ready(function () {
         idCodeObj1.targetButton = '#getIdCode1';
         idCodeObj1.getIdCode($('#contact_phone').val());
     });
-    $('#getIdCode2').click(function (){
+    $('#getIdCode2').click(function () {
         var idCodeObj2 = IdCode;
         idCodeObj2.targetLable = '#idCodeLable2';
         idCodeObj1.targetButton = '#getIdCode2';
@@ -55,6 +56,35 @@ $(document).ready(function () {
         idCodeObj1.targetButton = '#getIdCode3';
 
         idCodeObj3.getIdCode($('#design_phone').val());
+    });
+    $('#submit_inform').click(function () {
+        var formData = new FormData();
+        formData.append('name', $('#lost_name').val());
+        formData.append('gender', $('#gender').val());
+        formData.append('birthday', $('#birthday').val());
+        formData.append('lost_date', $('#lost_date').val());
+        formData.append('home_loc_province', $('#home_loc_province').val());
+        formData.append('home_loc_city', $('#home_loc_city').val());
+        formData.append('home_loc_town', $('#home_loc_town').val());
+        formData.append('lost_loc_province', $('#lost_loc_province').val());
+        formData.append('lost_loc_city', $('#lost_loc_city').val());
+        formData.append('lost_loc_town', $('#lost_loc_town').val());
+        formData.append('height', $('#height').val());
+        formData.append('description', $('#comment').value());
+        formData.append('c_name', $('#contact_name').val());
+        formData.append('c_tel', $('#c_tel').val());
+        formData.append('idCode', $('#idCode1').val());
+        formData.append('img', document.getElementById("image").files[0]);
+
+        $.ajax({
+            url: 'api / newinform',
+            type: 'POST',
+            data: formData,
+            success:function (result) {
+                
+            }
+
+        })
     });
     $('#comment').trigger('autoresize');
 

@@ -12,3 +12,7 @@ CATEGORY = [('show_works', u'作品展示'), ('apply', u'活动报名'), ('book_
 BASE_URL = '127.0.0.1'
 PER_PAGE = 36
 
+CACHE_TYPE = 'filesystem'
+CACHE_DIR ='./cache'
+CACHE_DEFAULT_TIMEOUT = '3000'
+IDCODE_TIMEOUT = '300'

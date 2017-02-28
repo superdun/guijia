@@ -10,7 +10,9 @@ from moduleWechat import wechat_resp
 from flask_paginate import Pagination, get_page_args
 from werkzeug import secure_filename
 from faceModule import detect
+from moduleCache import cache
 import time
+import random
 
 # debug in wsgi
 # from werkzeug.debug import DebuggedApplication
@@ -20,6 +22,15 @@ import time
 #
 
 application = app
+
+def makeIdCode(key):
+    class makeClass():
+        @cache.cached(timeout=int(app.config.get('IDCODE_TIMEOUT')), key_prefix=key)
+        def check(self):
+            return random.randint(0,999999)
+    CheckClass= makeClass()
+    return CheckClass.check()
+
 
 
 @app.route('/')
@@ -59,9 +70,12 @@ def mapDataApi():
     return jsonify(results.values())
 @app.route('/api/idcode', methods=['POST'])
 def idcodeApi():
-    print request.form['phone']
+    num = str(int(request.form['phone']))
+    idCode = makeIdCode(num)
     return jsonify({'status':'ok'})
-
+@app.route('/api/newinform', methods=['POST'])
+def newInformApi():
+    pass
 @app.route('/emergency')
 def emergencyList():
     return render_template('emergencyList.html')
