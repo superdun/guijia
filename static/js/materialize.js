@@ -7414,8 +7414,8 @@ DatePicker.defaults = (function( prefix ) {
         close: '关闭',
 
         // The format to show on the `input` element
-        format: 'd/mm/yyyy',
-
+        // format: 'd/mm/yyyy',
+        format: 'yyyy年mm月dd日',
         // Classes
         klass: {
 

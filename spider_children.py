@@ -3,13 +3,18 @@
 
 from pyquery import PyQuery as pq
 import time
+import datetime
 
 from sqlalchemy import Column, String, create_engine, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+def dateConvert(date):
 
+    raw_date = '-'.join([date.split(u'年')[0],date.split(u'年')[1].split(u'月')[0],date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+
+    return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
 class MissingChild (Base):
     __tablename__ = 'missingchildren'
 
@@ -67,11 +72,11 @@ def baseRecord():
 
             gender = dd('#table_1_normaldivr > ul > li:nth-child(4)').text()
 
-            birthday = dd('#table_1_normaldivr > ul > li:nth-child(5)').text()
 
+            birthday = dateConvert(dd('#table_1_normaldivr > ul > li:nth-child(5)').text())
             height = dd('#table_1_normaldivr > ul > li:nth-child(6)').text()
 
-            missing_time = dd('#table_1_normaldivr > ul > li:nth-child(7)').text()
+            missing_time = dateConvert(dd('#table_1_normaldivr > ul > li:nth-child(7)').text())
 
             confirm_location = dd('#table_1_normaldivr > ul > li:nth-child(8)').text()
             if len(dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')) > 1:
@@ -141,11 +146,11 @@ def addRecord():
 
             gender = dd('#table_1_normaldivr > ul > li:nth-child(4)').text()
 
-            birthday = dd('#table_1_normaldivr > ul > li:nth-child(5)').text()
+            birthday = dateConvert(dd('#table_1_normaldivr > ul > li:nth-child(5)').text())
 
             height = dd('#table_1_normaldivr > ul > li:nth-child(6)').text()
 
-            missing_time = dd('#table_1_normaldivr > ul > li:nth-child(7)').text()
+            missing_time = dateConvert(dd('#table_1_normaldivr > ul > li:nth-child(7)').text())
 
             confirm_location = dd('#table_1_normaldivr > ul > li:nth-child(8)').text()
             if len(dd('#table_1_normaldivr > ul > li:nth-child(9)').text().split(',')) > 1:
@@ -201,5 +206,5 @@ def addRecord():
                 session.add(newChild)
                 session.commit()
                 print '+1'
-addRecord()
-#baseRecord()
+#addRecord()
+baseRecord()

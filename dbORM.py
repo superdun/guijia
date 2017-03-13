@@ -87,7 +87,7 @@ class Missingchildren(db.Model):
         self.description = description
         self.comment = comment
         self.login_time = login_time
-        self.created_at = time.time()
+        self.created_at = int(time.time())
         self.volunteer = volunteer
         self.status = status
         self.short_name=short_name

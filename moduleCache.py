@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
-from moduleGlobal import app
-from flask_cache import Cache
+from werkzeug.contrib.cache import SimpleCache
 
-cache = Cache(app)
+cache =  SimpleCache()
 
 

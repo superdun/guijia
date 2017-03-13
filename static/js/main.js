@@ -38,53 +38,89 @@ $(document).ready(function () {
         selectYears: 15 // Creates a dropdown of 15 years to control year
     });
     $('#getIdCode1').click(function () {
-        var idCodeObj1 = IdCode;
-        idCodeObj1.targetLable = '#idCodeLable1';
-        idCodeObj1.targetButton = '#getIdCode1';
-        idCodeObj1.getIdCode($('#contact_phone').val());
+        re = /^1\d{10}$/;
+        if (re.test($('#contact_phone').val())) {
+            var idCodeObj1 = IdCode;
+            idCodeObj1.targetLable = '#idCodeLable1';
+            idCodeObj1.targetButton = '#getIdCode1';
+            idCodeObj1.getIdCode($('#contact_phone').val());
+        }
+        else {
+            $('#contact_phone').addClass('invalid')
+        }
+
     });
     $('#getIdCode2').click(function () {
-        var idCodeObj2 = IdCode;
-        idCodeObj2.targetLable = '#idCodeLable2';
-        idCodeObj1.targetButton = '#getIdCode2';
+        re = /^1\d{10}$/;
+        if (re.test($('#market_phone').val())) {
+            var idCodeObj2 = IdCode;
+            idCodeObj2.targetLable = '#idCodeLable2';
+            idCodeObj1.targetButton = '#getIdCode2';
 
-        idCodeObj2.getIdCode($('#market_phone').val());
+            idCodeObj2.getIdCode($('#market_phone').val());
+        }
+        else {
+            $('#market_phone').addClass('invalid')
+        }
+
     });
     $('#getIdCode3').click(function () {
-        var idCodeObj3 = IdCode;
-        idCodeObj3.targetLable = '#idCodeLable3';
-        idCodeObj1.targetButton = '#getIdCode3';
+        re = /^1\d{10}$/;
+        if (re.test($('#design_phone').val())) {
+            var idCodeObj3 = IdCode;
+            idCodeObj3.targetLable = '#idCodeLable3';
+            idCodeObj1.targetButton = '#getIdCode3';
 
-        idCodeObj3.getIdCode($('#design_phone').val());
+            idCodeObj3.getIdCode($('#design_phone').val());
+        }
+        else {
+            $('#design_phone').addClass('invalid')
+        }
+
     });
-    $('#submit_inform').click(function () {
-        var formData = new FormData();
-        formData.append('name', $('#lost_name').val());
-        formData.append('gender', $('#gender').val());
-        formData.append('birthday', $('#birthday').val());
-        formData.append('lost_date', $('#lost_date').val());
-        formData.append('home_loc_province', $('#home_loc_province').val());
-        formData.append('home_loc_city', $('#home_loc_city').val());
-        formData.append('home_loc_town', $('#home_loc_town').val());
-        formData.append('lost_loc_province', $('#lost_loc_province').val());
-        formData.append('lost_loc_city', $('#lost_loc_city').val());
-        formData.append('lost_loc_town', $('#lost_loc_town').val());
-        formData.append('height', $('#height').val());
-        formData.append('description', $('#comment').value());
-        formData.append('c_name', $('#contact_name').val());
-        formData.append('c_tel', $('#c_tel').val());
-        formData.append('idCode', $('#idCode1').val());
-        formData.append('img', document.getElementById("image").files[0]);
+    $('#newProfile').click(function () {
+        if (!$('#idCode1').val()) {
+            $('#idCode1').addClass('invalid')
+        }
+        else {
+            var formData = new FormData();
+            formData.append('lost_name', $('#lost_name').removeClass('invalid').val());
+            formData.append('gender', $('#gender').removeClass('invalid').val());
+            formData.append('birthday', $('#birthday').removeClass('invalid').val());
+            formData.append('lost_date', $('#lost_date').removeClass('invalid').val());
+            formData.append('lost_loc_province', $('#lost_loc_province').removeClass('invalid').val());
+            formData.append('lost_loc_city', $('#lost_loc_city').removeClass('invalid').val());
+            formData.append('lost_loc_town', $('#lost_loc_town').removeClass('invalid').val());
+            formData.append('height', $('#height').removeClass('invalid').val());
+            formData.append('description', $('#description').removeClass('invalid').val());
+            formData.append('contact_name', $('#contact_name').removeClass('invalid').val());
+            formData.append('contact_phone', $('#contact_phone').removeClass('invalid').val());
+            formData.append('idCode', $('#idCode1').removeClass('invalid').val());
+            formData.append('img', document.getElementById("image").files[0]);
 
-        $.ajax({
-            url: 'api / newinform',
-            type: 'POST',
-            data: formData,
-            success:function (result) {
-                
-            }
+            $.ajax({
+                url: 'api/profile',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result['status'] == 'lacked') {
+                        result['msg'].forEach(function (v, k) {
+                            $('#' + v).removeClass('valid').addClass('invalid')
+                        })
+                    }
+                    if (result['status'] == 'nopic') {
+                        $('#image').removeClass('valid').addClass('invalid')
+                    }
+                    if (result['status'] == 'wrongcode') {
+                        $('#idCode1').removeClass('valid').addClass('invalid')
+                    }
+                }
 
-        })
+            })
+
+        }
     });
     $('#comment').trigger('autoresize');
 

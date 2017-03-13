@@ -16,6 +16,12 @@ body > div.container{
 .btn, .btn-large{
     background-color:#ee6e73;
 }
+.btn:hover, .btn-large:hover{
+    background-color: #ee5a5c;
+}
+.btn:focus, .btn-large:focus{
+    background-color: #a14244;
+}
 .detailTd{
     width:30%;
     color: #ee6e73;

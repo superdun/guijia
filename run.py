@@ -9,9 +9,10 @@ import flask_login
 from moduleWechat import wechat_resp
 from flask_paginate import Pagination, get_page_args
 from werkzeug import secure_filename
-from faceModule import detect
 from moduleCache import cache
-import time
+from faceModule import detect
+from smsModule import sendSMS
+import time,datetime
 import random
 
 # debug in wsgi
@@ -23,59 +24,114 @@ import random
 
 application = app
 
-def makeIdCode(key):
-    class makeClass():
-        @cache.cached(timeout=int(app.config.get('IDCODE_TIMEOUT')), key_prefix=key)
-        def check(self):
-            return random.randint(0,999999)
-    CheckClass= makeClass()
-    return CheckClass.check()
 
+def makeIdCode(key):
+    v=str(random.randint(0, 999999))
+    cache.set(key=key,value=v,timeout=int(app.config.get('IDCODE_TIMEOUT')))
+    return v
+def dateConvert(date):
+
+    raw_date = '-'.join([date.split(u'年')[0],date.split(u'年')[1].split(u'月')[0],date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+
+    return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
 
 
 @app.route('/')
 def index(thumbnail=''):
-
     return render_template('index.html')
+
 
 @app.route('/api/mapData')
 def mapDataApi():
     curTime = time.time()
     bbhj_img_domain = app.config.get('BAOBEIHUIJIA_PREVIEW_IMG_DOMAIN')
     local_img_domain = QINIU_DOMAIN
-    base_url ='disappearance/'
+    base_url = 'disappearance/'
     todayTime = curTime - curTime % 86400
     items = Missingchildren.query.filter(Missingchildren.created_at >= todayTime).filter(
         Missingchildren.status == 'open').all()
     results = {}
     for i in items:
         if u'内蒙古' in i.missing_location_province:
-            province=u'内蒙古'
-        elif len(i.missing_location_province)<2:
+            province = u'内蒙古'
+        elif len(i.missing_location_province) < 2:
             continue
         else:
             province = i.missing_location_province[:2]
         if province in results.keys():
             results[province]['count'] += 1
         else:
-            if i.source=='baobeihuijia':
-                img_url=bbhj_img_domain+i.image
+            if i.source == 'baobeihuijia':
+                img_url = bbhj_img_domain + i.image
             else:
-                img_url=local_img_domain+i.image
-            results[province] = {"name": province, "count": 0, "tooltip": "<a href='%s'><b><font size='15' color='#238B45'>%s</font></b></a><br>%s<br><img src='%s' width='150'/>"%(base_url+str(i.id),i.short_name,i.description[:10]+'...',img_url)}
+                img_url = local_img_domain + i.image
+            results[province] = {"name": province, "count": 0,
+                                 "tooltip": "<a href='%s'><b><font size='15' color='#238B45'>%s</font></b></a><br>%s<br><img src='%s' width='150'/>" % (
+                                 base_url + str(i.id), i.short_name, i.description[:10] + '...', img_url)}
     for j in results.values():
-        j['tooltip'] = (u"<font size='15' color='#238A45'>%s</font>最新动态：<br>" % (j['name'] + u':' + str(j['count']) + u'个<br>')) + \
+        j['tooltip'] = (u"<font size='15' color='#238A45'>%s</font>最新动态：<br>" % (
+        j['name'] + u':' + str(j['count']) + u'个<br>')) + \
                        j['tooltip']
 
     return jsonify(results.values())
+
+
 @app.route('/api/idcode', methods=['POST'])
 def idcodeApi():
     num = str(int(request.form['phone']))
     idCode = makeIdCode(num)
-    return jsonify({'status':'ok'})
-@app.route('/api/newinform', methods=['POST'])
-def newInformApi():
-    pass
+    msg='{"idCode":"%s"}' % idCode
+    result = sendSMS('id',num,msg).send()
+    print result
+    return jsonify({'status': 'ok','msg':result})
+
+
+@app.route('/api/profile', methods=['POST'])
+def profileApi():
+    filter_list=[]
+    for i in request.form:
+        if request.form[i]=='' or request.form[i]=='null':
+            filter_list.append(i)
+    if  filter_list:
+        return jsonify({'status': 'lacked','msg':filter_list})
+
+    name = request.form['lost_name']
+    gender = request.form['gender']
+    birthday = dateConvert(request.form['birthday'])
+    missing_time = dateConvert(request.form['lost_date'])
+    missing_location_province = request.form['lost_loc_province']
+    missing_location_city = request.form['lost_loc_city']
+    missing_location_town = request.form['lost_loc_town']
+    height = request.form['height']
+    description = request.form['description']
+    c_name = request.form['contact_name']
+    c_tel = str(request.form['contact_phone'])
+    idCode = request.form['idCode']
+    img = request.files['img']
+    print type(idCode)
+    print cache.get(c_tel)
+    if not img:
+        return jsonify({'status': 'nopic','msg':''})
+    if idCode !=  cache.get(c_tel):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
+    sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
+    if sourceResult['result'] == 1:
+        sourceImg = sourceResult['localUrl']
+        profile = Missingchildren(bid='', image=sourceImg, name=name, gender=gender, birthday=birthday
+                        , height=str(height) + u'厘米', missing_time=missing_time, source='guijia', c_name=c_name
+                        , c_tel=c_tel, confirm_location='', missing_location_province=missing_location_province
+                        , missing_location_city=missing_location_city, missing_location_town=missing_location_town,
+                        description=description, comment='', login_time=time.time(), volunteer='', status='pending',
+                        short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
+        db.session.add(profile)
+        db.session.commit()
+        return jsonify(status='ok', error=u'')
+    else:
+        return jsonify(status='failed', error=u'服务器出错，请稍后再试')
+
+
+
+
 @app.route('/emergency')
 def emergencyList():
     return render_template('emergencyList.html')
@@ -114,7 +170,14 @@ def issuance():
     return render_template('issuanceList.html')
 
 
-@app.route('/post/<postId>')
+# @app.route('/joinus')
+# def joinUs():
+#     return render_template('join.html')
+
+# @app.route('/donate')
+# def donate():
+#     return render_template('donate.html')
+# @app.route('/post/<postId>')
 def post(postId):
     item = Post.query.filter_by(id=postId).first()
     item.view_count = item.view_count + 1
