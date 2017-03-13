@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
-from dbORM import db, User, Missingchildren
+from dbORM import db, User, Missingchildren,Message
 import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
@@ -81,13 +81,14 @@ def idcodeApi():
     num = str(int(request.form['phone']))
     idCode = makeIdCode(num)
     msg='{"idCode":"%s"}' % idCode
-    result = sendSMS('id',num,msg).send()
+    sendResult = sendSMS('id',num,msg).send()
     print result
     return jsonify({'status': 'ok','msg':result})
 
 
 @app.route('/api/profile', methods=['POST'])
 def profileApi():
+    adminPhone = app.config.get('SMS_ADMIN_PHONE')
     filter_list=[]
     for i in request.form:
         if request.form[i]=='' or request.form[i]=='null':
@@ -123,12 +124,16 @@ def profileApi():
                         short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
         db.session.add(profile)
         db.session.commit()
+        notiMsg='{"type":"%s","msg":"%s"}' % (u'新走失申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
+        sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
+
         return jsonify(status='ok', error=u'')
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
 @app.route('/api/member',methods=['POST',])
 def newMemberApi():
     filter_list=[]
+    adminPhone = app.config.get('SMS_ADMIN_PHONE')
     for i in request.form:
         if request.form[i]=='' or request.form[i]=='null':
             filter_list.append(i)
@@ -136,7 +141,20 @@ def newMemberApi():
         return jsonify({'status': 'lacked','msg':filter_list})
     if idCode !=  cache.get(c_tel):
         return jsonify({'status': 'wrongcode', 'msg': ''})
+    name = request.form['join_name']
+    description = request.form['join_description']
+    num = str(request.form['join_phone'])
+    status = 'pending'
+    idCode =str(request.form['idCode'])
+    notiMsg='{"type":"%s","msg":"%s"}' % (u'新成员申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
+    sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
+    newMsg = Message(name=name,description=description,mobile=num,status=status)
+    db.session.add(profile)
+    db.session.commit()
+    notiMsg='{"type":"%s","msg":"%s"}' % (u'新成员申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
+    sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
 
+    return jsonify(status='ok', error=u'')    
 
 
 
