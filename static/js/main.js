@@ -122,6 +122,38 @@ $(document).ready(function () {
 
         }
     });
-    $('#comment').trigger('autoresize');
+        $('#newMenmber').click(function () {
+        if (!$('#idCode2').val()) {
+            $('#idCode2').addClass('invalid')
+        }
+        else {
+            var formDataJoin = new FormData();
+            formData.append('join_name', $('#join_name').removeClass('invalid').val());
+            formData.append('join_description', $('#join_description').removeClass('invalid').val());
+            formData.append('join_phone', $('#join_phone').removeClass('invalid').val());
+            formData.append('idCode', $('#idCode2').removeClass('invalid').val());
+
+            $.ajax({
+                url: 'api/profile',
+                type: 'POST',
+                data: formDataJoin,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result['status'] == 'lacked') {
+                        result['msg'].forEach(function (v, k) {
+                            $('#' + v).removeClass('valid').addClass('invalid')
+                        })
+                    }
+                    if (result['status'] == 'wrongcode') {
+                        $('#idCode2').removeClass('valid').addClass('invalid')
+                    }
+                }
+
+            })
+
+        }
+    });
+    $('#description').trigger('autoresize');
 
 });

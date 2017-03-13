@@ -108,8 +108,6 @@ def profileApi():
     c_tel = str(request.form['contact_phone'])
     idCode = request.form['idCode']
     img = request.files['img']
-    print type(idCode)
-    print cache.get(c_tel)
     if not img:
         return jsonify({'status': 'nopic','msg':''})
     if idCode !=  cache.get(c_tel):
@@ -128,6 +126,16 @@ def profileApi():
         return jsonify(status='ok', error=u'')
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
+@app.route('/api/member',methods=['POST',])
+def newMemberApi():
+    filter_list=[]
+    for i in request.form:
+        if request.form[i]=='' or request.form[i]=='null':
+            filter_list.append(i)
+    if  filter_list:
+        return jsonify({'status': 'lacked','msg':filter_list})
+    if idCode !=  cache.get(c_tel):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
 
 
 

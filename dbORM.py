@@ -14,18 +14,19 @@ db = SQLAlchemy(app)
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    goal = db.Column(db.String(120))
+    description = db.Column(db.String(1020))
     mobile = db.Column(db.String(120))
-    update_time = db.Column(db.String(120))
+    created_time = db.Column(db.String(120))
+    status = db.Column(db.String(120))
 
-    def __init__(self, name='', goal='', password='', mobile='', update_time=''):
+    def __init__(self, name='', description='', mobile='', created_time=''):
         self.name = name
-        self.goal = goal
+        self.description = description
         self.mobile = mobile
-        self.update_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        self.created_time = time.time()
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<msg %r>' % self.name
 
 
 class User(db.Model):

@@ -196,48 +196,38 @@
                                 <form class="col s12">
                                     <div class="row">
                                         <div class="input-field  ">
-                                            <input id="design_name" type="text" class="validate">
-                                            <label for="design_name">姓名</label>
+                                            <input id="apply_name" type="text" class="validate">
+                                            <label   data-error="输入错误" for="apply_name">姓名</label>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="input-field   ">
-                                            <textarea id="design_comment" class="materialize-textarea"></textarea>
-                                            <label for="design_comment">描述</label>
+                                            <textarea id="join_description" class="materialize-textarea"></textarea>
+                                            <label for="join_description"   data-error="输入错误">描述</label>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="file-field input-field   ">
-                                            <div class="btn">
-                                                <span>任何作品，简历，图片...</span>
-                                                <input type="file" id="design_image">
-                                            </div>
-                                            <div class="file-path-wrapper ">
-                                                <input class="file-path validate" type="text">
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field   col s10">
-                                            <input id="design_phone" type="tel" class="validate">
-                                            <label for="design_phone">联系人电话</label>
+                                            <input id="join_phone" type="tel" class="validate">
+                                            <label for="join_phone"   data-error="输入错误">联系人电话</label>
                                         </div>
                                         <div class="col s2">
                                             <a class="btn-floating btn-small red" style="text-align: center"
-                                               id="getIdCode3">
+                                               id="getIdCode2">
                                                 验证
                                             </a>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <input id="idCode3" type="number" class="validate">
-                                            <label for="idCode3" id="idCodeLable3">短信验证码</label>
+                                            <input id="idCode2" type="number" class="validate">
+                                            <label for="idCode2" id="idCodeLable3"   data-error="输入错误">短信验证码</label>
                                         </div>
                                     </div>
                                 </form>
-                                <button class="btn waves-effect waves-light" type="submit" name="action">提交
+                                <button class="btn waves-effect waves-light" type="submit" name="action" id="newMember">提交
                                     <i class="material-icons right">send</i>
                                 </button>
                             </div>
