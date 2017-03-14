@@ -13,10 +13,13 @@ Base = declarative_base()
 
 
 def dateConvert(date):
-    raw_date = '-'.join(
-        [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0], date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+    try:
+        raw_date = '-'.join(
+            [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0], date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+        return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
+    except IndexError:
+        return date
 
-    return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
 
 
 class MissingChild(Base):
