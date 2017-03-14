@@ -23,7 +23,7 @@ var IdCode = {
         $(IdCode.targetLable).text(IdCode.time + "秒后可重新获取");
         if (IdCode.time == 0) {
             clearInterval(IdCode.timer);
-            $(IdCode.targetButton).removeAttr('disabled')
+            $(IdCode.targetButton).removeAttr('disabled');
             $(IdCode.targetLable).text("输入验证码");
         }
     }
