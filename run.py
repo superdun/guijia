@@ -14,6 +14,7 @@ from faceModule import detect
 from smsModule import sendSMS
 import time,datetime
 import random
+import json
 
 # debug in wsgi
 # from werkzeug.debug import DebuggedApplication
@@ -26,7 +27,7 @@ application = app
 
 
 def makeIdCode(key):
-    v=str(random.randint(0, 999999))
+    v=str(random.randint(100000, 999999))
     cache.set(key=key,value=v,timeout=int(app.config.get('IDCODE_TIMEOUT')))
     return v
 def dateConvert(date):
@@ -80,10 +81,10 @@ def mapDataApi():
 def idcodeApi():
     num = str(int(request.form['phone']))
     idCode = makeIdCode(num)
-    msg='{"idCode":"%s"}' % idCode
+    msg={"idCode":"%s"% idCode}
     sendResult = sendSMS('id',num,msg).send()
-    print result
-    return jsonify({'status': 'ok','msg':result})
+    print sendResult
+    return jsonify({'status': 'ok','msg':sendResult})
 
 
 @app.route('/api/profile', methods=['POST'])
@@ -124,7 +125,7 @@ def profileApi():
                         short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
         db.session.add(profile)
         db.session.commit()
-        notiMsg='{"type":"%s","msg":"%s"}' % (u'新走失申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
+        notiMsg='{"name": "%s","number":"%s","description":"%s"}'%(name,c_tel,description[0:20])
         sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
 
         return jsonify(status='ok', error=u'')
@@ -134,24 +135,25 @@ def profileApi():
 def newMemberApi():
     filter_list=[]
     adminPhone = app.config.get('SMS_ADMIN_PHONE')
+    print request.form
     for i in request.form:
         if request.form[i]=='' or request.form[i]=='null':
             filter_list.append(i)
     if  filter_list:
         return jsonify({'status': 'lacked','msg':filter_list})
-    if idCode !=  cache.get(c_tel):
-        return jsonify({'status': 'wrongcode', 'msg': ''})
     name = request.form['join_name']
     description = request.form['join_description']
     num = str(request.form['join_phone'])
+    idCode = str(request.form['idCode'])
+    # if idCode !=  cache.get(num):
+    #     return jsonify({'status': 'wrongcode', 'msg': ''})
+
     status = 'pending'
-    idCode =str(request.form['idCode'])
-    notiMsg='{"type":"%s","msg":"%s"}' % (u'新成员申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
-    sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
+
     newMsg = Message(name=name,description=description,mobile=num,status=status)
-    db.session.add(profile)
+    db.session.add(newMsg)
     db.session.commit()
-    notiMsg='{"type":"%s","msg":"%s"}' % (u'新成员申请',name+u' 申请加入，电话：'+num+u' 描述'+description[:20])
+    notiMsg='{"name": "%s","number":"%s","description":"%s"}'%(name,num,description[0:20])
     sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
 
     return jsonify(status='ok', error=u'')    

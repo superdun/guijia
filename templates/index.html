@@ -196,22 +196,22 @@
                                 <form class="col s12">
                                     <div class="row">
                                         <div class="input-field  ">
-                                            <input id="apply_name" type="text" class="validate">
-                                            <label   data-error="输入错误" for="apply_name">姓名</label>
+                                            <input id="join_name" type="text" class="validate">
+                                            <label data-error="输入错误" for="join_name">姓名</label>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="input-field   ">
                                             <textarea id="join_description" class="materialize-textarea"></textarea>
-                                            <label for="join_description"   data-error="输入错误">描述</label>
+                                            <label for="join_description" data-error="输入错误">描述</label>
                                         </div>
                                     </div>
-                                    </div>
+
                                     <div class="row">
                                         <div class="input-field   col s10">
                                             <input id="join_phone" type="tel" class="validate">
-                                            <label for="join_phone"   data-error="输入错误">联系人电话</label>
+                                            <label for="join_phone" data-error="输入错误">联系人电话</label>
                                         </div>
                                         <div class="col s2">
                                             <a class="btn-floating btn-small red" style="text-align: center"
@@ -223,11 +223,12 @@
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <input id="idCode2" type="number" class="validate">
-                                            <label for="idCode2" id="idCodeLable3"   data-error="输入错误">短信验证码</label>
+                                            <label for="idCode2" id="idCodeLable3" data-error="输入错误">短信验证码</label>
                                         </div>
                                     </div>
                                 </form>
-                                <button class="btn waves-effect waves-light" type="submit" name="action" id="newMember">提交
+                                <button class="btn waves-effect waves-light" type="submit" name="action" id="newMember">
+                                    提交
                                     <i class="material-icons right">send</i>
                                 </button>
                             </div>
@@ -237,140 +238,140 @@
                 </div>
             </div>
             <!--<div id="help3">-->
-                <!--<div class="row">-->
-                    <!--<div class="col s12 m6 l4 offset-l2">-->
-                        <!--<div class="card">-->
-                            <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
-                                                                                              <!--src="{{url_for('static', filename='imgs/market.png')}}">-->
-                            <!--</div>-->
-                            <!--<div class="card-content"><span-->
-                                    <!--class="card-title activator grey-text text-darken-4">推广志愿者<i-->
-                                    <!--class="material-icons right">more_vert</i></span>-->
-                                <!--<p>如果您对推广运营很熟悉或感兴趣，并热心于公益，请加入....</p>-->
-                                <!--<p class="click_for_detail">点击图片查看详情</p>-->
-                            <!--</div>-->
-                            <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">推广志愿者<i-->
-                                    <!--class="material-icons right">close</i></span>-->
-                                <!--<p>如果您对推广运营公众号或网站很熟悉或感兴趣，并热心于公益，请加入我们</p>-->
-                                <!--<form class="col s12">-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field  ">-->
-                                            <!--<input id="design_name" type="text" class="validate">-->
-                                            <!--<label for="design_name">姓名</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="col s12 m6 l4 offset-l2">-->
+            <!--<div class="card">-->
+            <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
+            <!--src="{{url_for('static', filename='imgs/market.png')}}">-->
+            <!--</div>-->
+            <!--<div class="card-content"><span-->
+            <!--class="card-title activator grey-text text-darken-4">推广志愿者<i-->
+            <!--class="material-icons right">more_vert</i></span>-->
+            <!--<p>如果您对推广运营很熟悉或感兴趣，并热心于公益，请加入....</p>-->
+            <!--<p class="click_for_detail">点击图片查看详情</p>-->
+            <!--</div>-->
+            <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">推广志愿者<i-->
+            <!--class="material-icons right">close</i></span>-->
+            <!--<p>如果您对推广运营公众号或网站很熟悉或感兴趣，并热心于公益，请加入我们</p>-->
+            <!--<form class="col s12">-->
+            <!--<div class="row">-->
+            <!--<div class="input-field  ">-->
+            <!--<input id="design_name" type="text" class="validate">-->
+            <!--<label for="design_name">姓名</label>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field   ">-->
-                                            <!--<textarea id="design_comment" class="materialize-textarea"></textarea>-->
-                                            <!--<label for="design_comment">描述</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="file-field input-field   ">-->
-                                            <!--<div class="btn">-->
-                                                <!--<span>任何作品，简历，图片...</span>-->
-                                                <!--<input type="file" id="design_image">-->
-                                            <!--</div>-->
-                                            <!--<div class="file-path-wrapper ">-->
-                                                <!--<input class="file-path validate" type="text">-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field   col s10">-->
-                                            <!--<input id="design_phone" type="tel" class="validate">-->
-                                            <!--<label for="design_phone">联系人电话</label>-->
-                                        <!--</div>-->
-                                        <!--<div class="col s2">-->
-                                            <!--<a class="btn-floating btn-small red" style="text-align: center"-->
-                                               <!--id="getIdCode3">-->
-                                                <!--验证-->
-                                            <!--</a>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field col s12">-->
-                                            <!--<input id="idCode3" type="number" class="validate">-->
-                                            <!--<label for="idCode3" id="idCodeLable3">短信验证码</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</form>-->
-                                <!--<button class="btn waves-effect waves-light" type="submit" name="action">提交-->
-                                    <!--<i class="material-icons right">send</i>-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field   ">-->
+            <!--<textarea id="design_comment" class="materialize-textarea"></textarea>-->
+            <!--<label for="design_comment">描述</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="file-field input-field   ">-->
+            <!--<div class="btn">-->
+            <!--<span>任何作品，简历，图片...</span>-->
+            <!--<input type="file" id="design_image">-->
+            <!--</div>-->
+            <!--<div class="file-path-wrapper ">-->
+            <!--<input class="file-path validate" type="text">-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field   col s10">-->
+            <!--<input id="design_phone" type="tel" class="validate">-->
+            <!--<label for="design_phone">联系人电话</label>-->
+            <!--</div>-->
+            <!--<div class="col s2">-->
+            <!--<a class="btn-floating btn-small red" style="text-align: center"-->
+            <!--id="getIdCode3">-->
+            <!--验证-->
+            <!--</a>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field col s12">-->
+            <!--<input id="idCode3" type="number" class="validate">-->
+            <!--<label for="idCode3" id="idCodeLable3">短信验证码</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</form>-->
+            <!--<button class="btn waves-effect waves-light" type="submit" name="action">提交-->
+            <!--<i class="material-icons right">send</i>-->
+            <!--</button>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                    <!--</div>-->
-                    <!--<div class="col s12 m6 l4">-->
-                        <!--<div class="card">-->
-                            <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
-                                                                                              <!--src="{{url_for('static', filename='imgs/design.png')}}">-->
-                            <!--</div>-->
-                            <!--<div class="card-content"><span-->
-                                    <!--class="card-title activator grey-text text-darken-4">设计志愿者<i-->
-                                    <!--class="material-icons right">more_vert</i></span>-->
-                                <!--<p>如果您有设计方面的才华，并热心于公益，请加入....</p>-->
-                                <!--<p class="click_for_detail">点击图片查看详情</p>-->
+            <!--</div>-->
+            <!--<div class="col s12 m6 l4">-->
+            <!--<div class="card">-->
+            <!--<div class="card-image waves-effect waves-block waves-light"><img class="activator"-->
+            <!--src="{{url_for('static', filename='imgs/design.png')}}">-->
+            <!--</div>-->
+            <!--<div class="card-content"><span-->
+            <!--class="card-title activator grey-text text-darken-4">设计志愿者<i-->
+            <!--class="material-icons right">more_vert</i></span>-->
+            <!--<p>如果您有设计方面的才华，并热心于公益，请加入....</p>-->
+            <!--<p class="click_for_detail">点击图片查看详情</p>-->
 
-                            <!--</div>-->
-                            <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">设计志愿者<i-->
-                                    <!--class="material-icons right">close</i></span>-->
-                                <!--<p>如果您有设计方面的才华，并热心于公益，请加入我们</p>-->
-                                <!--<form class="col s12">-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field   ">-->
-                                            <!--<input id="market_name" type="text" class="validate">-->
-                                            <!--<label for="market_name">姓名</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+            <!--</div>-->
+            <!--<div class="card-reveal"><span class="card-title grey-text text-darken-4">设计志愿者<i-->
+            <!--class="material-icons right">close</i></span>-->
+            <!--<p>如果您有设计方面的才华，并热心于公益，请加入我们</p>-->
+            <!--<form class="col s12">-->
+            <!--<div class="row">-->
+            <!--<div class="input-field   ">-->
+            <!--<input id="market_name" type="text" class="validate">-->
+            <!--<label for="market_name">姓名</label>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field">-->
-                                            <!--<textarea id="market_comment" class="materialize-textarea"></textarea>-->
-                                            <!--<label for="market_comment">描述</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="file-field input-field   ">-->
-                                            <!--<div class="btn">-->
-                                                <!--<span>任何作品，简历，图片...</span>-->
-                                                <!--<input type="file" id="market_image">-->
-                                            <!--</div>-->
-                                            <!--<div class="file-path-wrapper ">-->
-                                                <!--<input class="file-path validate" type="text">-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field   col s10">-->
-                                            <!--<input id="market_phone" type="tel" class="validate">-->
-                                            <!--<label for="market_phone">联系人电话</label>-->
-                                        <!--</div>-->
-                                        <!--<div class="col s2">-->
-                                            <!--<a class="btn-floating btn-small red" style="text-align: center"-->
-                                               <!--id="getIdCode2">-->
-                                                <!--验证-->
-                                            <!--</a>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="row">-->
-                                        <!--<div class="input-field col s12">-->
-                                            <!--<input id="idCode2" type="number" class="validate">-->
-                                            <!--<label for="idCode2" id="idCodeLable2">短信验证码</label>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</form>-->
-                                <!--<button class="btn waves-effect waves-light" type="submit" name="action"-->
-                                        <!--id="submit_inform">提交-->
-                                    <!--<i class="material-icons right">send</i>-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field">-->
+            <!--<textarea id="market_comment" class="materialize-textarea"></textarea>-->
+            <!--<label for="market_comment">描述</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="file-field input-field   ">-->
+            <!--<div class="btn">-->
+            <!--<span>任何作品，简历，图片...</span>-->
+            <!--<input type="file" id="market_image">-->
+            <!--</div>-->
+            <!--<div class="file-path-wrapper ">-->
+            <!--<input class="file-path validate" type="text">-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field   col s10">-->
+            <!--<input id="market_phone" type="tel" class="validate">-->
+            <!--<label for="market_phone">联系人电话</label>-->
+            <!--</div>-->
+            <!--<div class="col s2">-->
+            <!--<a class="btn-floating btn-small red" style="text-align: center"-->
+            <!--id="getIdCode2">-->
+            <!--验证-->
+            <!--</a>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="input-field col s12">-->
+            <!--<input id="idCode2" type="number" class="validate">-->
+            <!--<label for="idCode2" id="idCodeLable2">短信验证码</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</form>-->
+            <!--<button class="btn waves-effect waves-light" type="submit" name="action"-->
+            <!--id="submit_inform">提交-->
+            <!--<i class="material-icons right">send</i>-->
+            <!--</button>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                    <!--</div>-->
-                <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
             <!--</div>-->
         </div>
     </div>
@@ -387,7 +388,7 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <input id="lost_name" type="text" class="validate">
-                                    <label  data-error="输入错误" for="lost_name">走失人姓名</label>
+                                    <label data-error="输入错误" for="lost_name">走失人姓名</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -397,18 +398,18 @@
                                         <option value="男">男</option>
                                         <option value="女">女</option>
                                     </select>
-                                    <label  data-error="输入错误" for="gender">性别</label>
+                                    <label data-error="输入错误" for="gender">性别</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <label  data-error="输入错误" for="birthday">生日</label>
+                                    <label data-error="输入错误" for="birthday">生日</label>
                                     <input id="birthday" type="date" class="datepicker">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <label  data-error="输入错误" for="lost_date">走失日期</label>
+                                    <label data-error="输入错误" for="lost_date">走失日期</label>
                                     <input id="lost_date" type="date" class="datepicker">
                                 </div>
                             </div>
@@ -416,7 +417,7 @@
                                 <div class="input-field col s2 m2 l2">
                                     <input id="lost_loc_province" type="text" class="validate">
 
-                                    <label  data-error="输入错误" for="lost_loc_province">走失地 省</label>
+                                    <label data-error="输入错误" for="lost_loc_province">走失地 省</label>
                                 </div>
                                 <div class="input-field col s2 m2 l2">
                                     <input id="lost_loc_city" type="text" class="validate">
@@ -458,13 +459,13 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <input id="contact_name" type="text" class="validate">
-                                    <label  data-error="输入错误" for="contact_name">联系人姓名</label>
+                                    <label data-error="输入错误" for="contact_name">联系人姓名</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s5">
                                     <input id="contact_phone" type="tel" class="validate">
-                                    <label  data-error="输入错误" for="contact_phone">联系人电话</label>
+                                    <label data-error="输入错误" for="contact_phone">联系人电话</label>
 
                                 </div>
                                 <div class="col s2">
@@ -475,7 +476,7 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <input id="idCode1" type="number" class="validate">
-                                    <label  data-error="输入错误" for="idCode1" id="idCodeLable1">短信验证码</label>
+                                    <label data-error="输入错误" for="idCode1" id="idCodeLable1">短信验证码</label>
                                 </div>
                             </div>
                         </form>

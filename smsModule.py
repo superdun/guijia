@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-#coding: utf-8
+# -*- coding: utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding("utf8")
 import sys,os
 import urllib,urllib2
 import base64
@@ -37,9 +40,9 @@ class sendSMS(object):
         self.make_request(user_params)
 
     def percent_encode(self,encodeStr):
-
         encodeStr = str(encodeStr)
-        res = urllib.quote(encodeStr.decode('utf8').encode('utf8'), '')
+
+        res = urllib.quote(encodeStr.decode('utf-8').encode('utf-8'), '')
         res = res.replace('+', '%20')
         res = res.replace('*', '%2A')
         res = res.replace('%7E', '~')
@@ -72,6 +75,7 @@ class sendSMS(object):
             parameters[key] = user_params[key]
         signature = self.compute_signature(parameters, self.access_key_secret)
         parameters['Signature'] = signature
+        print parameters
         url = self.server_address + "/?" + urllib.urlencode(parameters)
         return url
 

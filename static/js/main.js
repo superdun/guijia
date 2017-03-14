@@ -52,32 +52,19 @@ $(document).ready(function () {
     });
     $('#getIdCode2').click(function () {
         re = /^1\d{10}$/;
-        if (re.test($('#market_phone').val())) {
+        if (re.test($('#join_phone').val())) {
             var idCodeObj2 = IdCode;
             idCodeObj2.targetLable = '#idCodeLable2';
-            idCodeObj1.targetButton = '#getIdCode2';
+            idCodeObj2.targetButton = '#getIdCode2';
 
-            idCodeObj2.getIdCode($('#market_phone').val());
+            idCodeObj2.getIdCode($('#join_phone').val());
         }
         else {
-            $('#market_phone').addClass('invalid')
+            $('#join_phone').addClass('invalid')
         }
 
     });
-    $('#getIdCode3').click(function () {
-        re = /^1\d{10}$/;
-        if (re.test($('#design_phone').val())) {
-            var idCodeObj3 = IdCode;
-            idCodeObj3.targetLable = '#idCodeLable3';
-            idCodeObj1.targetButton = '#getIdCode3';
 
-            idCodeObj3.getIdCode($('#design_phone').val());
-        }
-        else {
-            $('#design_phone').addClass('invalid')
-        }
-
-    });
     $('#newProfile').click(function () {
         if (!$('#idCode1').val()) {
             $('#idCode1').addClass('invalid')
@@ -122,19 +109,19 @@ $(document).ready(function () {
 
         }
     });
-        $('#newMenmber').click(function () {
+        $('#newMember').click(function () {
         if (!$('#idCode2').val()) {
             $('#idCode2').addClass('invalid')
         }
         else {
             var formDataJoin = new FormData();
-            formData.append('join_name', $('#join_name').removeClass('invalid').val());
-            formData.append('join_description', $('#join_description').removeClass('invalid').val());
-            formData.append('join_phone', $('#join_phone').removeClass('invalid').val());
-            formData.append('idCode', $('#idCode2').removeClass('invalid').val());
+            formDataJoin.append('join_name', $('#join_name').removeClass('invalid').val());
+            formDataJoin.append('join_description', $('#join_description').removeClass('invalid').val());
+            formDataJoin.append('join_phone', $('#join_phone').removeClass('invalid').val());
+            formDataJoin.append('idCode', $('#idCode2').removeClass('invalid').val());
 
             $.ajax({
-                url: 'api/profile',
+                url: '/api/member',
                 type: 'POST',
                 data: formDataJoin,
                 contentType: false,

@@ -15,15 +15,16 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(1020))
-    mobile = db.Column(db.String(120))
-    created_time = db.Column(db.String(120))
+    mobile = db.Column(db.String(11))
+    created_at = db.Column(db.String(120))
     status = db.Column(db.String(120))
 
-    def __init__(self, name='', description='', mobile='', created_time=''):
+    def __init__(self, name='', description='', mobile='', created_at='',status='pending'):
         self.name = name
         self.description = description
         self.mobile = mobile
-        self.created_time = time.time()
+        self.created_at = time.time()
+        self.status = status
 
     def __repr__(self):
         return '<msg %r>' % self.name
