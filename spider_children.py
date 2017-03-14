@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+import sys
+reload(sys)
+sys.setdefaultencoding("utf8")
 from pyquery import PyQuery as pq
 import time
 import datetime
@@ -20,15 +22,15 @@ class MissingChild (Base):
 
     id = Column(Integer, primary_key=True)
 
-    
+
     bid = Column(String)
-    
+
     image = Column(String)
-    
+
     name = Column(String)
-    
+
     gender = Column(String)
-    
+
     birthday = Column(String)
     
     height = Column(String)
