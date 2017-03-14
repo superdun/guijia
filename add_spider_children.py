@@ -130,7 +130,7 @@ def baseRecord():
                                     status='open',
                                     short_name=name.split('(')[0].split(u'（')[0].split(' ')[0]
                                     )
-            print name
+            print page
             session.add(newChild)
             session.commit()
 
@@ -204,10 +204,9 @@ def addRecord():
                                     status='open',
                                     short_name=name.split('(')[0].split(u'（')[0].split(' ')[0]
                                     )
-            print name
+            print page
             hasName = len(session.query(MissingChild).filter(MissingChild.name == name).all())
             hasBirthday = len(session.query(MissingChild).filter(MissingChild.birthday == birthday).all())
-            print birthday
             if hasName and hasBirthday:
                 return 1
             else:
