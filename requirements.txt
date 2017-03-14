@@ -37,7 +37,6 @@ redis==2.10.5
 reportlab==3.0
 requests==2.6.0
 requests-toolbelt==0.7.0
-sessioninstaller==0.0.0
 six==1.10.0
 software-center-aptd-plugins==0.0.0
 SQLAlchemy==1.1.1
