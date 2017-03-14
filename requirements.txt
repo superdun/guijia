@@ -39,14 +39,9 @@ requests==2.6.0
 requests-toolbelt==0.7.0
 six==1.10.0
 SQLAlchemy==1.1.1
-VTK==5.8.0
 wechat-sdk==0.6.4
 Werkzeug==0.11.15
-wrapt==1.10.8
 WTForms==2.1
-wxPython==2.8.12.1
-wxPython-common==2.8.12.1
-xdiagnose===3.6.3build2
 xlrd==1.0.0
 xlwt==1.1.2
 
