@@ -214,8 +214,19 @@ def post(postId):
     return render_template('post.html', item=item)
 
 
-@app.route('/wechat', methods=['GET', 'POST'])
+@app.route('/api/wechat', methods=['GET', 'POST'])
 def iot_bath_temp():
+    # token = app.config.get('WECHAT_TOKEN')
+    # appid = app.config.get('WECHAT_APPID')
+    # appsecret = app.config.get('WECHAT_APPSECRET')
+    # encoding_aes_key = app.config.get('WECHAT_AESKEY')
+    # encrypt_mode = app.config.get('WECHAT_ENC_MODE')
+    # signature = request.args.get('signature')
+    # timestamp = request.args.get('timestamp')
+    # nonce = request.args.get('nonce')
+    # body_text = request.data
+    # return wechat_resp(token, appid, appsecret,
+    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
     token = app.config.get('WECHAT_TOKEN')
     appid = app.config.get('WECHAT_APPID')
     appsecret = app.config.get('WECHAT_APPSECRET')
@@ -224,9 +235,11 @@ def iot_bath_temp():
     signature = request.args.get('signature')
     timestamp = request.args.get('timestamp')
     nonce = request.args.get('nonce')
-    body_text = request.data
-    return wechat_resp(token, appid, appsecret,
-                       encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+    echostr=request.args.get('echostr')
+    return echostr
+    # body_text = request.data
+    # return wechat_resp(token, appid, appsecret,
+    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
 
 
 @app.route('/wechat', methods=['GET', 'POST'])
