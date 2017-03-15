@@ -6,7 +6,7 @@ import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
 import flask_login
-from moduleWechat import wechat_resp
+# from moduleWechat import wechat_resp
 from flask_paginate import Pagination, get_page_args
 from werkzeug import secure_filename
 from moduleCache import cache
@@ -126,6 +126,7 @@ def profileApi():
                         short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
         db.session.add(profile)
         db.session.commit()
+        cache.delete(c_tel)
         notiMsg='{"name": "%s","number":"%s"}'%(name,c_tel)
         sendNotiResult = sendSMS('noti_a',adminPhone,notiMsg).send()
 
@@ -154,6 +155,7 @@ def newMemberApi():
     newMsg = Message(name=name,description=description,mobile=num,status=status)
     db.session.add(newMsg)
     db.session.commit()
+    cache.delete(num)
     notiMsg='{"name": "%s","number":"%s"}'%(name,num)
     sendNotiResult = sendSMS('noti_v',adminPhone,notiMsg).send()
 

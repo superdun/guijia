@@ -1,170 +1,88 @@
 # -*- coding: utf-8 -*-
 from wechat_sdk import WechatBasic, WechatConf
+from wechat_sdk.exceptions import ParseError
+from wechat_sdk.messages import (TextMessage, ImageMessage)
+from moduleCache import cache
+from moduleFaceSet import FaceSet
+from dbORM import Findingchildren
 import requests
 from moduleGlobal import app
 import json
 
 
-def wechat_resp(token='', appid='', appsecret='', encoding_aes_key='', encrypt_mode='', signature='', timestamp='', nonce='', body_text=''):
-    conf = WechatConf(token=token, appid=appid, appsecret=appsecret,
-                      encoding_aes_key=encoding_aes_key, encrypt_mode=encrypt_mode)
-    global wechat
-    wechat = WechatBasic(conf=conf)
-    print body_text
-    wechat.parse_data(body_text)
-    message = wechat.get_message()
-    response = None
-    if message.type == 'text' and message.content == u'浴室':
-        return bathroom()
-    elif message.type != 'text':
-        return defalut_resp()
-    elif message.type == 'text' and message.content == u'加入':
-        return join()
-    elif message.type == 'text' and message.content == u'详情':
-        return defalut_resp()
-    elif message.type == 'text' and message.content == u'介绍':
-        return introduce()
-    else:
-        return tuling_robot(message.content, message.source)
+class Wechat(object):
+    def __init__(self, token='', appid='', appsecret='', encoding_aes_key='', encrypt_mode='', signature='',
+                 timestamp='', nonce=''):
+        self.token = token
+        self.appid = appid
+        self.appsecret = appsecret
+        self.encoding_aes_key = encoding_aes_key
+        self.encrypt_mode = encrypt_mode
+        self.signature = signature
+        self.timestamp = timestamp
+        self.nonce = nonce
+        conf = WechatConf(token=token, appid=appid, appsecret=appsecret,
+                          encoding_aes_key=encoding_aes_key, encrypt_mode=encrypt_mode)
+        self.wechat = WechatBasic(conf=conf)
+
+    def getResponse(self, body_text):
+        face = FaceSet(app.config.get('FACE_SECRET'), app.config.get('FACE_API_KEY'))
+        wechat = self.wechat
+        if wechat.check_signature(self.signature, self.timestamp, self.nonce):
+            try:
+                self.wechat.parse_data(body_text)
+
+            except ParseError:
+                return 0
+            id = wechat.message.id
+            target = wechat.message.target
+            source = wechat.message.source
+            time = wechat.message.time
+            type = wechat.message.type
+            raw = wechat.message.raw
+            if isinstance(wechat.message, TextMessage):
+                content = wechat.message.content
+            elif isinstance(wechat.message, ImageMessage):
+                if cache.get('wechat_' + source):
+                    #too fast
+                    title = u'对不起'
+                    description = u'请不要过于频繁发送图片'
+                    url = app.config.get('HOST')
+                else:
+                    picurl = wechat.message.picurl
+                    media_id = wechat.message.media_id
+                    searchResult = face.search(picurl, 'missingchildren')
+
+                    if searchResult.has_key('error'):
+                        if searchResult['error']=='noface':
+                            title = u'对不起'
+                            description = u'请上传更清晰的图片'
+                            url=app.config.get('HOST')
+                        else:
+                            title = u'对不起服务器正忙'
+                            description = u'请上传更清晰的图片'
+                            url = app.config.get('HOST')
+                    elif searchResult['status'] == 0:
+                        title = u'对不起,没有匹配到合适的图片'
+                        description = u'感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如之后有匹配成功会及时通知您'
+                        url = app.config.get('HOST')
+                    elif searchResult['status'] == 1:
+                        title = u'找到一张相似度%d的照片'%searchResult['confidence']
+                        description = u'请在5分钟内回复此图片的拍摄地点与您的联系方式'
+                        url = app.config.get('HOST')
+                    elif searchResult['status'] == 2:
+                        title = u'找到一张相似度%d的照片'%searchResult['confidence']
+                        description = u'显示图片为最为匹配的图片，感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如有疑问请联系管理员'
+                        url = app.config.get('HOST')
+                    elif searchResult['status'] == 3:
+                        title = u'！！！找到一张相似度%d的照片！！！'%searchResult['confidence']
+                        description = u'显示图片为最为匹配的图片，感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息已经被上传至数据库，如之后有匹配成功会及时通知您，如有疑问请联系管理员'
+                        url = app.config.get('HOST')
 
 
-def oneNETApi(device=0):
-    apiKey = app.config.get('ONENET_API_KEY')
-    headers = {'api-key': apiKey}
-    r = requests.get(
-        'http://api.heclouds.com/devices/%d/datastreams' % device, headers=headers)
-    return r.json()
 
+            else:
+                return 0
 
-def bathroom():
-    deviceId = app.config.get('ONENET_API_DEVICE')['bathroom']
-    apiResponse = oneNETApi(deviceId)
-    if apiResponse['error'] == "succ":
-        response = wechat.response_news([
-            {
-                'title': u'浴室人数传感统计',
-                'description': u'当前浴室人数为%d\n数据更新于%s\n本功能由蓝鑫同学提供\n加入华理创客\n成为创客文化的传道者' % (apiResponse['data'][0]['current_value'], apiResponse['data'][0]['update_at']),
-                'url': u'http://ecustmaker.com',
-                'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-            }
-        ])
-        return response
-    else:
-        response = wechat.response_news([
-            {
-                'title': u'浴室人数传感统计',
-                'description': u'ooops,出了点岔子，程序猿正在全速修复！',
-                'url': u'http://ecustmaker.com',
-                'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-            }
-        ])
-        return response
-
-
-def defalut_resp():
-    response = wechat.response_news([
-        {
-            'title': u'加入华理创客',
-            'description': u"""加入我们,变身创客,或是创客文化的传播者！
-			--------------------------------------
-			回复‘加入’：获取加入我们的方式
-			回复‘介绍’：查看华理创客的风采
-			--------------------------------------
-			伊卡斯特物联网：
-			回复‘浴室’：获取当前浴室人数
-			回复‘温湿度’：获取校园里温度和湿度
-			--------------------------------------
-            聊天机器人：
-            回复任何你想说的话，天气，菜谱，火车航班等等等
-            更多功能等你挖掘！
-            """,
-            'url': u'http://ecustmaker.com',
-            'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-        }
-    ])
-    return response
-
-
-def tuling_robot(info, fromUserName):
-    tulingAPI = app.config.get('TULING_URL_API')
-    tulingKey = app.config.get('TULING_APIKEY')
-    tulingSecret = app.config.get('TULING_SECRET')
-    postBody = {'key': tulingKey, 'info': info,
-                'loc': u'上海市徐汇区华东理工大学', 'userid': fromUserName}
-    print postBody
-    r = requests.post(tulingAPI, data=postBody)
-    responseBody = r.json()
-    if responseBody['code'] > 400000:
-        response = wechat.response_news([
-            {
-                'title': u'华理创客空间提示您:',
-                'description': u'ooops,出了点岔子，程序猿正在全速修复！',
-                'url': u'http://ecustmaker.com',
-                'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-            }
-        ])
-        return response
-    elif responseBody['code'] == 100000:
-        response = wechat.response_text(responseBody['text'])
-        return response
-    elif responseBody['code'] == 200000:
-        response = wechat.response_news([
-            {
-                'title': u'华理创客空间提示您：',
-                'description': responseBody['text'],
-                'url': u'http://ecustmaker.com',
-                'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-            }
-        ])
-        return response
-
-    elif responseBody['code'] == 302000:
-        response = wechat.response_news([
-            {
-                'title': responseBody['list'][0]['article'],
-                'description': u'来源' + responseBody['list'][0]['source'] + u'\n点击查看详细',
-                'url': responseBody['list'][0]['detailurl'],
-                'picurl': responseBody['list'][0]['icon']
-            }
-        ])
-        return response
-    elif responseBody['code'] == 308000:
-        response = wechat.response_news([
-            {
-                'title': responseBody['list'][0]['name'],
-                'description': u'饿了？我觉得华林的菜比较好吃...\n' + responseBody['list'][0]['info'],
-                'url': responseBody['list'][0]['detailurl'],
-                'picurl': responseBody['list'][0]['icon']
-            }
-        ])
-        return response
-
-
-def join():
-    response = wechat.response_news([
-        {
-            'title': u'加入我们！',
-            'description': u"""可编辑报名短信"创客＋姓名＋联系电话"发送至18018562619
-            或编辑邮件"创客＋姓名＋联系电话"发送至邮箱：Ecust_Maker@163.com
-            届时我们将会与您联系！""",
-            'url': u'http://ecustmaker.com',
-            'picurl': u'http://mp.weixin.qq.com/mp/qrcode?scene=10000004&size=102&__biz=MzA5NDMzOTU1Nw=='
-        }
-    ])
-    return response
-
-
-def introduce():
-    response = wechat.response_news([
-        {
-            'title': u'加入我们！',
-            'description': u"""华理创客空间"是一个以创客为主题，集科技创作、技术实践与分享交流的创客空间
-            面向华理学子，提供一个创作作品与交流想法的环境，塑造一种创作与实践的氛围
-            对有想法的人，这里是一个分享与交流的空间
-            对于感兴趣的人，这里是一个参与与学习的环境
-            同时，这里也是一个启发兴趣与社交的空间。""",
-            'url': u'http://ecustmaker.com',
-            'picurl': u'http://ecustmaker.com/static/LOGO.jpg'
-        }
-    ])
-    return response
+        else:
+            return 0

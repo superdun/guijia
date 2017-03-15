@@ -67,6 +67,17 @@ class Childrenface(db.Model):
     def __repr__(self):
         return '<cid %r>' % self.childrenId
 
+class FChildrenface(db.Model):
+    childrenId = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(180))
+
+    def __init__(self, childrenId=0, token=''):
+        self.childrenId = childrenId
+        self.token = token
+
+    def __repr__(self):
+        return '<cid %r>' % self.childrenId
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)

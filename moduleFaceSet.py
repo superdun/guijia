@@ -15,6 +15,7 @@ class FaceSet(object):
         self.deleteSetsUrl = 'https://api-cn.faceplusplus.com/facepp/v3/faceset/removeface'
         self.getFaceToken = 'https://api-cn.faceplusplus.com/facepp/v3/detect'
         self.getDetailUrl = 'https://api-cn.faceplusplus.com/facepp/v3/faceset/getdetail'
+        self.searchUrl = 'https://api-cn.faceplusplus.com/facepp/v3/search'
         self.apiSecret = apiSecret
         self.apiKey = apiKey
 
@@ -95,6 +96,33 @@ class FaceSet(object):
                    'face_tokens': 'RemoveAllFaceTokens'}
         r = requests.post(url=self.deleteSetsUrl, data=payload,verify=False)
         return r.json()
+    def search(self,image,tag):
+        sets = self.getSets(tag)
+        for i in sets['facesets']:
+            payload = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'image_url': image,
+                       'outer_id': i['outer_id']}
+            r = requests.post(url=self.searchUrl, data=payload)
+            searchResult = r.json()
+            if searchResult.has_key('error_message'):
+                return {'error': searchResult['error_message']}
+            if searchResult.has_key('result'):
+                if searchResult['result']:
+                    faceToken = searchResult['result'][0]['face_token']
+                    confidence = searchResult['result'][0]['confidence']
+                    thresholds = searchResult['thresholds']
+                    if confidence<=thresholds['1e-3']:
+                        return {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                    elif  confidence>=thresholds['1e-3'] and confidence<=thresholds['1e-4'] :
+                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                    elif confidence>=thresholds['1e-4'] and confidence<=thresholds['1e-5'] :
+                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                    elif confidence>=thresholds['1e-5']:
+                        return {'status':3,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                else:
+                    return {'error':'noface'}
+            else:
+                return {'error': 'noface'}
+
 def t(children,face):
 
     for i in children:
@@ -117,6 +145,8 @@ def main():
     secret = app.config.get('FACE_SECRET')
     apiKey = app.config.get('FACE_API_KEY')
     face = FaceSet(secret, apiKey)
+    # print face.getSets('')
+    # print face.getDetail('missingchildren_4')
     g = []
     for  i in range(tCount):
         print per_page
