@@ -19,8 +19,10 @@ class sendSMS(object):
 
         self.TemplateCode = app.config.get('SMS_MODEL_ID_CODE')
         self.para = msg
-        if type=='noti':
-            self.TemplateCode = app.config.get('SMS_MODEL_NOTI_CODE')
+        if type=='noti_v':
+            self.TemplateCode = app.config.get('SMS_MODEL_NOTI_CODE_V')
+        if type=='noti_a':
+            self.TemplateCode = app.config.get('SMS_MODEL_NOTI_CODE_A')
 
 
         self.access_key_id = app.config.get('SMS_ACCESS_KEY')

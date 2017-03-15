@@ -19,7 +19,7 @@ class Message(db.Model):
     created_at = db.Column(db.String(120))
     status = db.Column(db.String(120))
 
-    def __init__(self, name='', description='', mobile='', created_at='',status='pending'):
+    def __init__(self, name='', description='', mobile='', created_at='', status='pending'):
         self.name = name
         self.description = description
         self.mobile = mobile
@@ -28,6 +28,44 @@ class Message(db.Model):
 
     def __repr__(self):
         return '<msg %r>' % self.name
+
+
+class Findingchildren(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(1020))
+    created_at = db.Column(db.String(120))
+    status = db.Column(db.String(120))
+    loc_province = db.Column(db.String(120))
+    loc_city = db.Column(db.String(120))
+    loc_town = db.Column(db.String(120))
+    source = db.Column(db.String(1020))
+    img = db.Column(db.String(1020))
+
+    def __init__(self, description='', source='', created_at='', status='pending', loc_province='', loc_city='',
+                 loc_town='', img=''):
+        self.description = description
+        self.created_at = time.time()
+        self.status = status
+        self.source = source
+        self.loc_province = loc_province
+        self.loc_city = loc_city
+        self.loc_town = loc_town
+        self.img = img
+
+    def __repr__(self):
+        return '<Findingchildren %r>' % self.source
+
+
+class Childrenface(db.Model):
+    childrenId = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(180))
+
+    def __init__(self, childrenId=0, token=''):
+        self.childrenId = childrenId
+        self.token = token
+
+    def __repr__(self):
+        return '<cid %r>' % self.childrenId
 
 
 class User(db.Model):
@@ -67,11 +105,12 @@ class Missingchildren(db.Model):
     created_at = db.Column(db.String(1200))
     volunteer = db.Column(db.String(1200))
     status = db.Column(db.String(1200))
-    short_name=db.Column(db.String(1200))
+    short_name = db.Column(db.String(1200))
+
     def __init__(self, bid='', image='', name='', gender='', birthday='', height='', missing_time='', source='',
                  c_name='', c_tel='', confirm_location='', missing_location_province='',
                  missing_location_city='', missing_location_town='', description='', comment='', login_time='',
-                 volunteer='', status='open',short_name=''):
+                 volunteer='', status='open', short_name=''):
         self.bid = bid
         self.image = image
         self.name = name
@@ -92,6 +131,7 @@ class Missingchildren(db.Model):
         self.created_at = int(time.time())
         self.volunteer = volunteer
         self.status = status
-        self.short_name=short_name
+        self.short_name = short_name
+
     def __repr__(self):
         return '<MissingChildren %r>' % self.name

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
-from dbORM import db, User, Missingchildren,Message
+from dbORM import db, User, Missingchildren,Message,Childrenface,Findingchildren
 import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
@@ -13,6 +13,7 @@ from moduleCache import cache
 from faceModule import detect
 from smsModule import sendSMS
 import time,datetime
+# from moduleFaceSet import FaceSet
 import random
 import json
 
@@ -125,8 +126,8 @@ def profileApi():
                         short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
         db.session.add(profile)
         db.session.commit()
-        notiMsg='{"name": "%s","number":"%s","description":"%s"}'%(name,c_tel,description[0:20])
-        sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
+        notiMsg='{"name": "%s","number":"%s"}'%(name,c_tel)
+        sendNotiResult = sendSMS('noti_a',adminPhone,notiMsg).send()
 
         return jsonify(status='ok', error=u'')
     else:
@@ -145,16 +146,16 @@ def newMemberApi():
     description = request.form['join_description']
     num = str(request.form['join_phone'])
     idCode = str(request.form['idCode'])
-    # if idCode !=  cache.get(num):
-    #     return jsonify({'status': 'wrongcode', 'msg': ''})
+    if idCode !=  cache.get(num):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
 
     status = 'pending'
 
     newMsg = Message(name=name,description=description,mobile=num,status=status)
     db.session.add(newMsg)
     db.session.commit()
-    notiMsg='{"name": "%s","number":"%s","description":"%s"}'%(name,num,description[0:20])
-    sendNotiResult = sendSMS('noti',adminPhone,notiMsg).send()
+    notiMsg='{"name": "%s","number":"%s"}'%(name,num)
+    sendNotiResult = sendSMS('noti_v',adminPhone,notiMsg).send()
 
     return jsonify(status='ok', error=u'')    
 
@@ -243,6 +244,28 @@ def wechat():
     return request.args.get('echostr')
     # return wechat_resp(token, appid, appsecret,
     #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+# @app.route('/token')
+# def faceToken():
+#     children=Missingchildren.query.all()
+#     secret = app.config.get('FACE_SECRET')
+#     apiKey = app.config.get('FACE_API_KEY')
+#     face = FaceSet(secret, apiKey)
+#     for i in children:
+#
+#         url=app.config.get('BAOBEIHUIJIA_IMG_DOMAIN')+i.image
+#         result = face.uploadFaces([url], 'missingchildren')
+#         print result
+#         cf = Childrenface(childrenId=i.id, token=result[0])
+#         db.session.add(cf)
+#         db.session.commit()
+#
+#
+#     # if len(result)==len(ids):
+#     #     for i in range(len(result)):
+#     #         cf = Childrenface(childrenId=ids[i],token=result[i])
+#     #         db.session.add(cf)
+#     db.session.commit()
+
 
 
 @app.route('/admin/upload', methods=['POST'])
