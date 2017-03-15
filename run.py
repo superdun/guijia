@@ -39,10 +39,15 @@ def dateConvert(date):
 
 
 @app.route('/')
+def guide(thumbnail=''):
+    return render_template('guide.html')
+@app.route('/index')
 def index(thumbnail=''):
     return render_template('index.html')
 
-
+@app.route('/issuance ')
+def issuance(thumbnail=''):
+    return render_template('index.html')
 @app.route('/api/mapData')
 def mapDataApi():
     curTime = time.time()
@@ -191,14 +196,14 @@ def disappearanceDetail(disappearanceId):
                            local_img_domain=local_img_domain)
 
 
-@app.route('/comparison')
-def comparison():
-    return render_template('comparisonList.html')
+@app.route('/search')
+def search():
+    return render_template('search.html')
 
 
-@app.route('/issuance')
-def issuance():
-    return render_template('issuanceList.html')
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 
 # @app.route('/joinus')
