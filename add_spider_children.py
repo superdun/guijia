@@ -5,7 +5,7 @@ from pyquery import PyQuery as pq
 import time
 import datetime
 
-from sqlalchemy import Column, String, create_engine, Integer
+from sqlalchemy import Column, String, create_engine, Integer, TIMESTAMP
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -15,11 +15,20 @@ Base = declarative_base()
 def dateConvert(date):
     try:
         raw_date = '-'.join(
-            [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0], date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
-        return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
-    except IndexError:
+            [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0],
+             date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+        date = str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
+        if len(date) == 8:
+            date = '000' + date
+        if len(date) == 10:
+            date = '0' + date
+        if len(date) == 9:
+            date = '00' + date
+        if len(date) < 8:
+            return '0'
         return date
-
+    except IndexError:
+        return '0'
 
 
 class MissingChild(Base):
@@ -141,6 +150,7 @@ def baseRecord():
 def addRecord():
     d = pq('http://www.baobeihuijia.com/list.aspx?tid=1&sex=&photo=1&page=1')
     page = int(d('.nxt').attr('href').split('=')[-1])
+    urls=[]
     for p in range(1, page + 1):
         d = pq('http://www.baobeihuijia.com/list.aspx?tid=1&sex=&photo=1&page=%d' % p)
         for i in d('.cimg'):
@@ -219,4 +229,4 @@ def addRecord():
 
 
 addRecord()
-#baseRecord()
+# baseRecord()

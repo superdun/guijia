@@ -244,8 +244,8 @@ def disappearanceList():
     items = Missingchildren.query.filter(Missingchildren.status == 'open').filter(
         Missingchildren.missing_time != u'未知时间').order_by('missing_time desc').offset(offset).limit(
         per_page).all()
-
-    pagination = Pagination(page=page, total=total)
+    print get_page_args()
+    pagination = Pagination(page=page, total=total,per_page=per_page)
     return render_template('disappearanceList.html', items=items, pagination=pagination,
                            bbhj_img_domain=bbhj_img_domain, local_img_domain=local_img_domain)
 

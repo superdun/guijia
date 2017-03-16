@@ -21,6 +21,8 @@ def dateConvert(date):
             date = '0'+date
         if len(date)==9:
             date = '00'+date
+        if len(date)<8:
+            return '0'
         return date
     except IndexError:
         return '0'
