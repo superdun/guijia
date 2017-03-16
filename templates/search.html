@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container col s12">
+    <div class="row">
+        <h3 class="page_title">发布线索</h3>
+        <h5 class="page_sub_title"> 请仔细填写相关信息，并上传走失人清晰的正面照片，照片将上传至数据库以供比对
+            如有结果，我们会随时通过手机与您联系
+        </h5>
+        <h5 class="page_sub_title"> 您也可以<a href="#modal1">关注我们的公众号</a>，随时随地上传线索！
+        </h5>
+        <div>
+            <h6 style="color: red">***本网站不向任何人收取任何费用***</h6>
+            <div class="card-panel">
+                <div class="row">
+                    <div id="uploadContainer" class="col  s12 m4 l3 push-l7 push-m8"></div>
+                    <form class="col  s12 m8 l6 pull-l3 pull-m4">
+                        <div class="row">
+                            <div class="file-field input-field col s12 ">
+                                <div class="btn">
+                                    <span>线索照片</span>
+                                    <input type="file" id="image">
+                                </div>
+                                <div class="file-path-wrapper ">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <label data-error="输入错误" for="find_date">发现日期</label>
+                                <input id="find_date" type="date" class="datepicker validate">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <input id="find_loc_province" type="text" class="validate">
+
+                                <label data-error="输入错误" for="find_loc_province">发现地 省</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="find_loc_city" type="text" class="validate">
+
+                                <label data-error="输入错误" for="find_loc_city">市</label>
+                            </div>
+                            <div class="input-field col s6 ">
+                                <input id="find_loc_town" type="text" class="validate">
+
+                                <label for="find_loc_town" data-error="输入错误">区县街道</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="description" class="materialize-textarea validate"></textarea>
+                                <label for="description" data-error="输入错误">描述</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s9 m9 l10">
+                                <input id="contact_phone" type="tel" class="validate">
+                                <label data-error="输入错误" for="contact_phone">联系人电话</label>
+
+                            </div>
+                            <div class="col s3 m3 l2">
+                                <a class="btn-floating btn-middle red" style="text-align: center" id="getIdCode1">
+                                    验证</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="idCode1" type="number" class="validate">
+                                <label data-error="输入错误" for="idCode1" id="idCodeLable1">短信验证码</label>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div>
+                    <button class="btn waves-effect waves-light" type="submit" name="action" id="newClu">发布信息
+                        <i class="material-icons right">send</i>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block modal %}
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h5>关注公众号，随时随地上传线索</h5>
+        <div class="row">
+            <div class="col s8 m6 l4 offset-l4 offset-m3 offset-s2"><img class="responsive-img" src="{{ url_for('static', filename='imgs/QR.jpg')  }}"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+  </div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

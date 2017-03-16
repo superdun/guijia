@@ -5,7 +5,7 @@ from pyquery import PyQuery as pq
 import time
 import datetime
 
-from sqlalchemy import Column, String, create_engine, Integer
+from sqlalchemy import Column, String, create_engine, Integer,TIMESTAMP
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -14,9 +14,16 @@ def dateConvert(date):
     try:
         raw_date = '-'.join(
             [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0], date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
-        return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
-    except IndexError:
+        date = str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
+        if len(date)==8:
+            date = '000'+date
+        if len(date)==10:
+            date = '0'+date
+        if len(date)==9:
+            date = '00'+date
         return date
+    except IndexError:
+        return '0'
 class MissingChild (Base):
     __tablename__ = 'missingchildren'
 

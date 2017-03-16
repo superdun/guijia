@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, jsonify, request, Response, r
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from wtforms import Form as wtForm
-from dbORM import db, User,Message
+from dbORM import db, User,Message,Findingchildren,Missingchildren,Fchildrenface,Childrenface
 from wtforms import TextAreaField, SelectField
 from wtforms.widgets import TextArea
 import thumb
@@ -19,9 +19,15 @@ import shutil
 def dashboard():
 
 
-    admin.add_view(UserView(User, db.session))
+    admin.add_view(LoginView(User, db.session))
 
-    admin.add_view(ModelView(Message, db.session))
+    admin.add_view(LoginView(Message, db.session))
+
+    admin.add_view(LoginView(Findingchildren, db.session))
+
+    admin.add_view(LoginView(Missingchildren, db.session))
+    admin.add_view(LoginView(Fchildrenface, db.session))
+    admin.add_view(LoginView(Childrenface, db.session))
 
 
 
@@ -59,6 +65,6 @@ class ImageUpload(form.ImageUploadField):
 
 
 
-class UserView(ModelView):
+class LoginView(ModelView):
     def is_accessible(self):
         return flask_login.current_user.is_authenticated

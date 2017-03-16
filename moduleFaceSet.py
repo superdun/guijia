@@ -140,7 +140,7 @@ def t(children,face):
 def main():
     children=Missingchildren.query.all()
     total = len(children)
-    tCount = 10
+    tCount = 1
     per_page= int(total/tCount)
     secret = app.config.get('FACE_SECRET')
     apiKey = app.config.get('FACE_API_KEY')

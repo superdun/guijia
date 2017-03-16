@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
-from dbORM import db, User, Missingchildren,Message,Childrenface,Findingchildren
+from dbORM import db, User, Missingchildren, Message, Childrenface, Findingchildren
 import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
@@ -12,7 +12,7 @@ from werkzeug import secure_filename
 from moduleCache import cache
 from faceModule import detect
 from smsModule import sendSMS
-import time,datetime
+import time, datetime
 # from moduleFaceSet import FaceSet
 import random
 import json
@@ -27,13 +27,20 @@ import json
 application = app
 
 
-def makeIdCode(key):
-    v=str(random.randint(100000, 999999))
-    cache.set(key=key,value=v,timeout=int(app.config.get('IDCODE_TIMEOUT')))
-    return v
-def dateConvert(date):
+@app.template_filter('strftime')
+def _jinja2_filter_datetime(date):
+    return time.strftime(u"%Y年%m月%d日", time.localtime(float(date)))
 
-    raw_date = '-'.join([date.split(u'年')[0],date.split(u'年')[1].split(u'月')[0],date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
+
+def makeIdCode(key):
+    v = str(random.randint(100000, 999999))
+    cache.set(key=key, value=v, timeout=int(app.config.get('IDCODE_TIMEOUT')))
+    return v
+
+
+def dateConvert(date):
+    raw_date = '-'.join(
+        [date.split(u'年')[0], date.split(u'年')[1].split(u'月')[0], date.split(u'年')[1].split(u'月')[1].split(u'日')[0]])
 
     return str(int(time.mktime(datetime.datetime.strptime(raw_date, "%Y-%m-%d").timetuple())))
 
@@ -41,13 +48,18 @@ def dateConvert(date):
 @app.route('/')
 def guide(thumbnail=''):
     return render_template('guide.html')
+
+
 @app.route('/index')
 def index(thumbnail=''):
     return render_template('index.html')
 
-@app.route('/issuance ')
-def issuance(thumbnail=''):
-    return render_template('index.html')
+
+@app.route('/profile')
+def profile(thumbnail=''):
+    return render_template('profile.html')
+
+
 @app.route('/api/mapData')
 def mapDataApi():
     curTime = time.time()
@@ -74,10 +86,10 @@ def mapDataApi():
                 img_url = local_img_domain + i.image
             results[province] = {"name": province, "count": 0,
                                  "tooltip": "<a href='%s'><b><font size='15' color='#238B45'>%s</font></b></a><br>%s<br><img src='%s' width='150'/>" % (
-                                 base_url + str(i.id), i.short_name, i.description[:10] + '...', img_url)}
+                                     base_url + str(i.id), i.short_name, i.description[:10] + '...', img_url)}
     for j in results.values():
         j['tooltip'] = (u"<font size='15' color='#238A45'>%s</font>最新动态：<br>" % (
-        j['name'] + u':' + str(j['count']) + u'个<br>')) + \
+            j['name'] + u':' + str(j['count']) + u'个<br>')) + \
                        j['tooltip']
 
     return jsonify(results.values())
@@ -87,21 +99,21 @@ def mapDataApi():
 def idcodeApi():
     num = str(int(request.form['phone']))
     idCode = makeIdCode(num)
-    msg={"idCode":"%s"% idCode}
-    sendResult = sendSMS('id',num,msg).send()
+    msg = {"idCode": "%s" % idCode}
+    sendResult = sendSMS('id', num, msg).send()
     print sendResult
-    return jsonify({'status': 'ok','msg':sendResult})
+    return jsonify({'status': 'ok', 'msg': sendResult})
 
 
 @app.route('/api/profile', methods=['POST'])
 def profileApi():
     adminPhone = app.config.get('SMS_ADMIN_PHONE')
-    filter_list=[]
+    filter_list = []
     for i in request.form:
-        if request.form[i]=='' or request.form[i]=='null':
+        if request.form[i] == '' or request.form[i] == 'null':
             filter_list.append(i)
-    if  filter_list:
-        return jsonify({'status': 'lacked','msg':filter_list})
+    if filter_list:
+        return jsonify({'status': 'lacked', 'msg': filter_list})
 
     name = request.form['lost_name']
     gender = request.form['gender']
@@ -114,58 +126,107 @@ def profileApi():
     description = request.form['description']
     c_name = request.form['contact_name']
     c_tel = str(request.form['contact_phone'])
-    idCode = request.form['idCode']
+    idCode = str(request.form['idCode'])
     img = request.files['img']
     if not img:
-        return jsonify({'status': 'nopic','msg':''})
-    if idCode !=  cache.get(c_tel):
+        return jsonify({'status': 'nopic', 'msg': ''})
+    if idCode != cache.get(c_tel):
         return jsonify({'status': 'wrongcode', 'msg': ''})
     sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
     if sourceResult['result'] == 1:
         sourceImg = sourceResult['localUrl']
         profile = Missingchildren(bid='', image=sourceImg, name=name, gender=gender, birthday=birthday
-                        , height=str(height) + u'厘米', missing_time=missing_time, source='guijia', c_name=c_name
-                        , c_tel=c_tel, confirm_location='', missing_location_province=missing_location_province
-                        , missing_location_city=missing_location_city, missing_location_town=missing_location_town,
-                        description=description, comment='', login_time=time.time(), volunteer='', status='pending',
-                        short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
+                                  , height=str(height) + u'厘米', missing_time=missing_time, source='guijia',
+                                  c_name=c_name
+                                  , c_tel=c_tel, confirm_location='',
+                                  missing_location_province=missing_location_province
+                                  , missing_location_city=missing_location_city,
+                                  missing_location_town=missing_location_town,
+                                  description=description, comment='', login_time=time.time(), volunteer='',
+                                  status='pending',
+                                  short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
         db.session.add(profile)
         db.session.commit()
         cache.delete(c_tel)
-        notiMsg='{"name": "%s","number":"%s"}'%(name,c_tel)
-        sendNotiResult = sendSMS('noti_a',adminPhone,notiMsg).send()
+        notiMsg = '{"name": "%s","number":"%s"}' % (name, c_tel)
+        sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
 
         return jsonify(status='ok', error=u'')
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
-@app.route('/api/member',methods=['POST',])
+
+
+@app.route('/api/member', methods=['POST', ])
 def newMemberApi():
-    filter_list=[]
+    filter_list = []
     adminPhone = app.config.get('SMS_ADMIN_PHONE')
     print request.form
     for i in request.form:
-        if request.form[i]=='' or request.form[i]=='null':
+        if request.form[i] == '' or request.form[i] == 'null':
             filter_list.append(i)
-    if  filter_list:
-        return jsonify({'status': 'lacked','msg':filter_list})
+    if filter_list:
+        return jsonify({'status': 'lacked', 'msg': filter_list})
     name = request.form['join_name']
     description = request.form['join_description']
     num = str(request.form['join_phone'])
     idCode = str(request.form['idCode'])
-    if idCode !=  cache.get(num):
+    if idCode != cache.get(num):
         return jsonify({'status': 'wrongcode', 'msg': ''})
 
     status = 'pending'
 
-    newMsg = Message(name=name,description=description,mobile=num,status=status)
+    newMsg = Message(name=name, description=description, mobile=num, status=status)
     db.session.add(newMsg)
     db.session.commit()
     cache.delete(num)
-    notiMsg='{"name": "%s","number":"%s"}'%(name,num)
-    sendNotiResult = sendSMS('noti_v',adminPhone,notiMsg).send()
+    notiMsg = '{"name": "%s","number":"%s"}' % (name, num)
+    sendNotiResult = sendSMS('noti_v', adminPhone, notiMsg).send()
 
-    return jsonify(status='ok', error=u'')    
+    return jsonify(status='ok', error=u'')
 
+
+@app.route('/api/clu', methods=['POST', ])
+def newCluApi():
+    adminPhone = app.config.get('SMS_ADMIN_PHONE')
+    filter_list = []
+    for i in request.form:
+        if request.form[i] == '' or request.form[i] == 'null':
+            filter_list.append(i)
+    if filter_list:
+        return jsonify({'status': 'lacked', 'msg': filter_list})
+    find_date = dateConvert(request.form['find_date'])
+    find_loc_province = request.form['find_loc_province']
+    find_loc_city = request.form['find_loc_city']
+    find_loc_town = request.form['find_loc_town']
+    description = request.form['description']
+    c_name = request.form['contact_name']
+    c_tel = str(request.form['contact_phone'])
+    idCode = request.form['idCode']
+    img = request.files['img']
+    if not img:
+        return jsonify({'status': 'nopic', 'msg': ''})
+    if idCode != cache.get(c_tel):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
+    sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
+    if sourceResult['result'] == 1:
+        sourceImg = sourceResult['localUrl']
+        clu = Findingchildren(img=sourceImg, finding_time=find_date, source='guijia',
+                              c_name=c_name, c_tel=c_tel,
+                              loc_province=find_loc_province
+                              , loc_city=find_loc_city,
+                              loc_town=find_loc_town,
+                              description=description,
+                              status='pending')
+
+        db.session.add(clu)
+        db.session.commit()
+        cache.delete(c_tel)
+        notiMsg = '{"name": "%s","number":"%s"}' % (u'新线索', c_tel)
+        sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
+
+        return jsonify(status='ok', error=u'')
+    else:
+        return jsonify(status='failed', error=u'服务器出错，请稍后再试')
 
 
 @app.route('/emergency')
@@ -179,10 +240,12 @@ def disappearanceList():
     local_img_domain = QINIU_DOMAIN
     page, per_page, offset = get_page_args()
     per_page = app.config.get('PER_PAGE')
-    items = Missingchildren.query.filter(Missingchildren.status == 'open').order_by('id desc').offset(offset).limit(
+    total = len(Missingchildren.query.filter(Missingchildren.status == 'open').all())
+    items = Missingchildren.query.filter(Missingchildren.status == 'open').filter(
+        Missingchildren.missing_time != u'未知时间').order_by('missing_time desc').offset(offset).limit(
         per_page).all()
-    print len(items)
-    pagination = Pagination(page=page, total=len(items))
+
+    pagination = Pagination(page=page, total=total)
     return render_template('disappearanceList.html', items=items, pagination=pagination,
                            bbhj_img_domain=bbhj_img_domain, local_img_domain=local_img_domain)
 
@@ -201,39 +264,8 @@ def search():
     return render_template('search.html')
 
 
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
-
-# @app.route('/joinus')
-# def joinUs():
-#     return render_template('join.html')
-
-# @app.route('/donate')
-# def donate():
-#     return render_template('donate.html')
-# @app.route('/post/<postId>')
-def post(postId):
-    item = Post.query.filter_by(id=postId).first()
-    item.view_count = item.view_count + 1
-    db.session.commit()
-    return render_template('post.html', item=item)
-
-
 @app.route('/api/wechat', methods=['GET', 'POST'])
 def iot_bath_temp():
-    # token = app.config.get('WECHAT_TOKEN')
-    # appid = app.config.get('WECHAT_APPID')
-    # appsecret = app.config.get('WECHAT_APPSECRET')
-    # encoding_aes_key = app.config.get('WECHAT_AESKEY')
-    # encrypt_mode = app.config.get('WECHAT_ENC_MODE')
-    # signature = request.args.get('signature')
-    # timestamp = request.args.get('timestamp')
-    # nonce = request.args.get('nonce')
-    # body_text = request.data
-    # return wechat_resp(token, appid, appsecret,
-    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
     token = app.config.get('WECHAT_TOKEN')
     appid = app.config.get('WECHAT_APPID')
     appsecret = app.config.get('WECHAT_APPSECRET')
@@ -242,7 +274,7 @@ def iot_bath_temp():
     signature = request.args.get('signature')
     timestamp = request.args.get('timestamp')
     nonce = request.args.get('nonce')
-    echostr=request.args.get('echostr')
+    echostr = request.args.get('echostr')
     return echostr
     # body_text = request.data
     # return wechat_resp(token, appid, appsecret,
@@ -264,6 +296,8 @@ def wechat():
     return request.args.get('echostr')
     # return wechat_resp(token, appid, appsecret,
     #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+
+
 # @app.route('/token')
 # def faceToken():
 #     children=Missingchildren.query.all()
@@ -295,99 +329,6 @@ def upload():
     return jsonify(result)
 
 
-@app.route('/face', methods=['GET', 'POST'])
-def face():
-    if request.method == 'GET':
-        if len(Face.query.filter_by(gender='Male').order_by(Face.grade).all()) < 3:
-            listMale = Face.query.filter_by(gender='Male').order_by(Face.grade.desc())[
-                       0:len(Face.query.order_by(Face.grade).all())]
-        else:
-            listMale = Face.query.filter_by(gender='Male').order_by(Face.grade.desc())[0:3]
-
-        if len(Face.query.filter_by(gender='Female').order_by(Face.grade).all()) < 3:
-            listFemale = Face.query.filter_by(gender='Female').order_by(Face.grade.desc())[
-                         0:len(Face.query.order_by(Face.grade).all())]
-        else:
-            listFemale = Face.query.filter_by(gender='Female').order_by(Face.grade.desc())[0:3]
-
-        if len(Face.query.filter(Face.age <= 13, Face.age > 0).order_by(Face.grade).all()) < 3:
-            listBaby = Face.query.filter(Face.age <= 13, Face.age > 0).order_by(Face.grade.desc())[
-                       0:len(Face.query.order_by(Face.grade).all())]
-        else:
-            listBaby = Face.query.filter(Face.age <= 13, Face.age > 0).order_by(Face.grade.desc())[0:3]
-        return render_template('face/faceIndex.html', listMale=listMale, listFemale=listFemale, listBaby=listBaby)
-    if request.method == 'POST':
-        key = app.config.get('FACE_KEY')
-        appKey = app.config.get('FACE_API_KEY')
-        img = request.files['img']
-        sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
-        if sourceResult['result'] == 1:
-            sourceImg = sourceResult['localUrl']
-            detectResult = detect(sourceImg, key, appKey)
-            print detectResult
-            if detectResult['status']:
-                detectResult['status'] = 'ok'
-                detectResult['sourceImg'] = sourceImg
-                faceDB = Face(grade=round(detectResult['grades']['grade'], 3),
-                              eye=round(detectResult['grades']['eye'], 3),
-                              mouth=round(detectResult['grades']['mouth'], 3),
-                              chin=round(detectResult['grades']['chin'], 3),
-                              feel=round(detectResult['grades']['feel'], 3),
-                              nose=round(detectResult['grades']['nose'], 3),
-                              comment=detectResult['comment'], sourceImg=sourceImg,
-                              resultImg=detectResult['imgResult']['localUrl'], gender=detectResult['gender'],
-                              age=detectResult['age'])
-                db.session.add(faceDB)
-                db.session.commit()
-                return jsonify(detectResult)
-            else:
-                detectResult['status'] = 'failed'
-                return jsonify(detectResult)
-        else:
-            return jsonify(status='failed', error=u'服务器出错，请稍后再试')
-
-
-@app.route('/randomchat', methods=['GET', 'POST'])
-def randomChat():
-    waitingRoom = redis_store.get('waitingRoom')
-
-    if not waitingRoom or waitingRoom == '':
-
-        room = makeRoomNumber()
-        session['room'] = room
-        session['name'] = 'A'
-        redis_store.set('waitingRoom', '%s:A' % room)
-        return render_template('randomchat/chat.html', room=room, name='A')
-
-    else:
-
-        roomInform = waitingRoom.split(':')
-        room = roomInform[0]
-        if roomInform[1] == 'B':
-            name = 'A'
-        else:
-            name = 'B'
-        session['room'] = room
-        session['name'] = name
-        redis_store.set('waitingRoom', '')
-        redis_store.set(room, "{\"A\":{\"count\":0,\"detail\":\"\"},\"B\":{\"count\":0,\"detail\":\"\"}}")
-        return render_template('randomchat/chat.html', room=room, name=name)
-
-
-@app.route('/randomchat/index')
-def randomChatIndex():
-    if request.args.get('room', '') == redis_store.get('waitingRoom').split(':')[0]:
-        redis_store.set('waitingRoom', '')
-    return redirect(url_for('randomChat'))
-
-
-@app.route('/randomchat/getinform')
-def getChatInform():
-    if request.args.get('room', '') == redis_store.get('waitingRoom').split(':')[0]:
-        redis_store.set('waitingRoom', '')
-    return redirect(url_for('randomChat'))
-
-
 @app.route("/robots.txt")
 def robots_txt():
     return Response('User-agent: *' + '\n' + 'Allow: /')
@@ -405,6 +346,82 @@ def google_verify():
 
 # admin
 admin.dashboard()
+
+# login
+
+
+login_manager = flask_login.LoginManager()
+
+login_manager.init_app(app)
+users = {}
+raw_users = User.query.all()
+for user in raw_users:
+    users[user.mobile] = {'password': user.password}
+
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized'
+
+
+class User(flask_login.UserMixin):
+    pass
+
+
+@login_manager.user_loader
+def user_loader(username):
+    if username not in users:
+        return
+
+    user = User()
+    user.id = username
+    return user
+
+
+@login_manager.request_loader
+def request_loader(request):
+    mobile = request.form.get('mobile')
+    if mobile not in users:
+        return
+
+    user = User()
+    user.id = mobile
+
+    # DO NOT ever store passwords in plaintext and always compare password
+    # hashes using constant-time comparison!
+    user.is_authenticated = request.form['password'] == users[mobile]['password']
+
+    return user
+
+@app.route('/api/login', methods=['POST',])
+def loginApi():
+    mobile = str(request.form['phone'])
+    idCode = str(request.form['idCode'])
+    if idCode==cache.get(mobile):
+        return jsonify({'status': 'bad idCode'})
+    if request.form['password'] == users[mobile]['password']:
+        user = User()
+        user.id = mobile
+        flask_login.login_user(user)
+        cache.delete(mobile)
+        return jsonify({'status': 'OK'})
+
+    return jsonify({'status': 'bad login'})
+@app.route('/login')
+def login():
+    if flask_login.current_user.is_authenticated:
+        return redirect('/admin')
+    return render_template('log.html')
+
+
+
+
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
 
 app.debug = True
 if __name__ == '__main__':

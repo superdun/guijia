@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>盾半仙的相面馆</title>
-    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 </head>
 <body id="body">
 <div class="container">
     <div class="row">
         <div class="col-md-3 col-sm-1 col-xs-0"></div>
         <div class="col-md-6 col-sm-10 col-xs-12">
-            <!--<img src="{{url_for('static', filename='demos/face/head.jpg')}}" width="100%">-->
+            <!--<img src="/static/demos/face/head.jpg" width="100%">-->
             <h2>颜值测评 0.2.1 by Dun</h2>
 
             <div class="alert alert-warning alert-dismissible fade in">
@@ -96,20 +96,46 @@
                                  aria-labelledby="headingOne">
                                 <div class="panel-body">
                                     <ul class="list-group">
-                                        {% for i in listMale %}
+
                                         <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>1.</h3></div>
                                                 <div class="col-md-10 col-sm-10 col-xs-11">
-                                                    <img src="{{ i['sourceImg'] }}" style="width:80%;">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/IUZR7/IMG_20161228_161415.jpg" style="width:80%;">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2 col-sm-2 col-xs-1"></div>
-                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：{{i['grade']}}分</div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：98.743分</div>
                                             </div>
                                         </li>
-                                        {% endfor %}
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>2.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/LFZQU/ae700ef4b17f2a8d9faa7c620260dea8.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：98.687分</div>
+                                            </div>
+                                        </li>
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>3.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/37Q6G/1.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：97.619分</div>
+                                            </div>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -128,20 +154,46 @@
                                  aria-labelledby="headingTwo">
                                 <div class="panel-body">
                                     <ul class="list-group">
-                                        {% for j in listFemale %}
+
                                         <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>1.</h3></div>
                                                 <div class="col-md-10 col-sm-10 col-xs-11">
-                                                    <img src="{{ j['sourceImg'] }}" style="width:80%;">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/KAOHG/4.jpg" style="width:80%;">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2 col-sm-2 col-xs-1"></div>
-                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：{{j['grade']}}分</div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：94.343分</div>
                                             </div>
                                         </li>
-                                        {% endfor %}
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>2.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/73ETF/images.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：93.795分</div>
+                                            </div>
+                                        </li>
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>3.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/J1TO6/012.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">综合颜值：93.406分</div>
+                                            </div>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -159,20 +211,46 @@
                                  aria-labelledby="headingThree">
                                 <div class="panel-body">
                                     <ul class="list-group">
-                                        {% for k in listBaby %}
+
                                         <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>{{loop.index}}.</h3></div>
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>1.</h3></div>
                                                 <div class="col-md-10 col-sm-10 col-xs-11">
-                                                    <img src="{{ k['sourceImg'] }}" style="width:80%;">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/XXMRT/1624005332.jpg" style="width:80%;">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-2 col-sm-2 col-xs-1"></div>
-                                                <div class="col-md-10 col-sm-10 col-xs-11">可爱值：{{100-(400/k['grade']|int)|round(3)}}分</div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">可爱值：94.118分</div>
                                             </div>
                                         </li>
-                                        {% endfor %}
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>2.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/8RB7X/mmexport1482144256929.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">可爱值：93.939分</div>
+                                            </div>
+                                        </li>
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"><h3>3.</h3></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">
+                                                    <img src="http://oc1is8h9w.bkt.clouddn.com/LVY7M/mmexport1485937473013.jpg" style="width:80%;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-1"></div>
+                                                <div class="col-md-10 col-sm-10 col-xs-11">可爱值：87.5分</div>
+                                            </div>
+                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -282,8 +360,8 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 </body>
-<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 <script>
 window.onload = function(){
         var input = document.getElementById("file_input");
@@ -344,51 +422,7 @@ window.onload = function(){
                         $('#panel').attr('class','panel panel-danger')
                         $('.panel-heading').text('错误！')
                         $('#error-container').css('visibility','visible')
-                        $('#result-table')            <div class="alert alert-warning alert-dismissible fade in">
-                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <strong>注意！</strong> <br>
-                <ul>
-                    <li>
-                        更新日志：0.2.1：
-                        将帅哥美女三甲分开展示.
-                        修改了一些权重值
-                        一些细节优化
-                    </li>
-                    <li>
-                        此功能仅供娱乐，请勿当真，每张图片上请保证有且只有一张（人）脸
-                    </li>
-                    <li>
-                        如果你的颜值进入前三名，则会显示在页面上哦....
-                    </li>
-                    <li>
-                        <strong>千万不要上传一些不正经的图片</strong>，我会过滤的，哼！
-                    </li>
-                    <li>
-                        如果我不小心过滤失败了，不正经的图片又进了前三名，显示在了页面上，后果自负哦
-                    </li>
-                    <li>
-                        开发纯属个人爱好，使用face++免费接口，和极其廉价的服务器，所以请勿上传超过1.5M的图片
-                    </li>
-                    <li>
-                        也不要恶意多次上传，测测自己就好了，理由同上..
-                    </li>
-                    <li>
-                        很大的可能会失败，请多试几次，理由同上+1..
-                    </li>
-                    <li>
-                        如果一直失败，你有请按下列步骤解决（ 1.联系我，微信号：lajidun 2.给我发红包，我换更好的服务器 3. 搞定...）
-                    </li>
-                    <li>
-                        如你觉得我说的这些没法接受，关掉页面吧 T_T,<strong>千万不要上传一些不正经的图片!!</strong>
-                    </li>
-                </ul>
-                <button type="button" data-dismiss="alert"><span aria-hidden="true">我知道了！</span><span class="sr-only">Close</span>
-                </button>
-            </div>
-
-        </div>
-
+                        $('#result-table').css('display','none')
                         $('#error-message').text(data['error'])
                         $('#upload').removeAttr('disabled')
 

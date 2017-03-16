@@ -21,13 +21,13 @@
             <li><a href="{{ url_for('search') }}">照片识别</a></li>
             <li><a href="{{ url_for('emergencyList') }}">紧急发布</a></li>
             <li><a href="{{ url_for('disappearanceList') }}">走失信息</a></li>
-            <li><a href="{{ url_for('issuance') }}">发布信息</a></li>
+            <li><a href="{{ url_for('profile') }}">发布信息</a></li>
         </ul>
         <ul class="side-nav" id="mobile-nav">
             <li><a href="{{ url_for('search') }}">照片识别</a></li>
             <li><a href="{{ url_for('emergencyList') }}">紧急发布</a></li>
             <li><a href="{{ url_for('disappearanceList') }}">走失信息</a></li>
-            <li><a href="{{ url_for('issuance') }}">发布信息</a></li>
+            <li><a href="{{ url_for('profile') }}">发布信息</a></li>
         </ul>
     </div>
 </nav>
@@ -65,6 +65,9 @@
         </div>
     </div>
 </footer>
+{% block modal %}
+
+{% endblock %}
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js') }}"></script>

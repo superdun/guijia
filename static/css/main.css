@@ -29,3 +29,7 @@ body > div.container{
 .theme_color{
     background-color: #f7aeb1;
 }
+
+.card-panel {
+    background-color: ghostwhite;
+}

@@ -33,7 +33,7 @@
                                         item.missing_location_town }}
                                     </li>
                                     <li class="collection-item">身高：{{ item.height}}</li>
-                                    <li class="collection-item">失踪日期：{{ item.missing_time }}</li>
+                                    <li class="collection-item">失踪日期：{{ item.missing_time |strftime}}</li>
                                     <li class="collection-item">描述：{{ item.description }}</li>
                                 </ul>
 

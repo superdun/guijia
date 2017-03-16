@@ -27,11 +27,11 @@
                             </tr>
                             <tr>
                                 <td class="detailTd">生日</td>
-                                <td>{{ item.birthday }}</td>
+                                <td>{{ item.birthday |strftime}}</td>
                             </tr>
                             <tr>
                                 <td class="detailTd">丢失日期：</td>
-                                <td>{{ item.missing_time }}</td>
+                                <td>{{ item.missing_time |strftime}}</td>
                             </tr>
                             <tr>
                                 <td class="detailTd">身高：</td>

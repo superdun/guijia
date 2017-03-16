@@ -68,16 +68,14 @@ class Wechat(object):
                         url = app.config.get('HOST')
                     elif searchResult['status'] == 1:
                         title = u'找到一张相似度%d的照片'%searchResult['confidence']
-                        description = u'请在5分钟内回复此图片的拍摄地点与您的联系方式'
-                        url = app.config.get('HOST')
+                        description = u'我们会立刻处理此信息，请在5分钟内回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
                     elif searchResult['status'] == 2:
-                        title = u'找到一张相似度%d的照片'%searchResult['confidence']
-                        description = u'显示图片为最为匹配的图片，感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如有疑问请联系管理员'
-                        url = app.config.get('HOST')
+                        title = u'找到一张相似度%d的照片，相似度比较高'%searchResult['confidence']
+                        description = u'我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
                     elif searchResult['status'] == 3:
-                        title = u'！！！找到一张相似度%d的照片！！！'%searchResult['confidence']
-                        description = u'显示图片为最为匹配的图片，感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息已经被上传至数据库，如之后有匹配成功会及时通知您，如有疑问请联系管理员'
-                        url = app.config.get('HOST')
+                        title = u'找到一张相似度%d的照片！！！，相似度非常高'%searchResult['confidence']
+                        description = u'这种情况十分重要，我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息，或直接与13061938526联系'
+
 
 
 

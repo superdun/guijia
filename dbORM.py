@@ -40,9 +40,11 @@ class Findingchildren(db.Model):
     loc_town = db.Column(db.String(120))
     source = db.Column(db.String(1020))
     img = db.Column(db.String(1020))
-
+    finding_time = db.Column(db.String(120))
+    c_name = db.Column(db.String(1200))
+    c_tel = db.Column(db.String(1200))
     def __init__(self, description='', source='', created_at='', status='pending', loc_province='', loc_city='',
-                 loc_town='', img=''):
+                 loc_town='', img='',finding_time='',c_name='', c_tel='',):
         self.description = description
         self.created_at = time.time()
         self.status = status
@@ -51,6 +53,9 @@ class Findingchildren(db.Model):
         self.loc_city = loc_city
         self.loc_town = loc_town
         self.img = img
+        self.finding_time=finding_time
+        self.c_name = c_name
+        self.c_tel = c_tel
 
     def __repr__(self):
         return '<Findingchildren %r>' % self.source
@@ -67,7 +72,7 @@ class Childrenface(db.Model):
     def __repr__(self):
         return '<cid %r>' % self.childrenId
 
-class FChildrenface(db.Model):
+class Fchildrenface(db.Model):
     childrenId = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(180))
 
@@ -84,12 +89,12 @@ class User(db.Model):
     name = db.Column(db.String(80))
     auth = db.Column(db.String(120))
     password = db.Column(db.String(120))
-
-    def __init__(self, name='', auth=1, password=''):
+    mobile = db.Column(db.String(120))
+    def __init__(self, name='', auth=1, password='',mobile=''):
         self.name = name
         self.auth = auth
         self.password = password
-
+        self.mobile=mobile
     def __repr__(self):
         return '<User %r>' % self.name
 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container col s12">
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field col s9 m9 l10">
+                <input id="phone" type="tel" class="validate">
+                <label data-error="输入错误" for="phone">联系人电话</label>
+
+            </div>
+            <div class="col s3 m3 l2">
+                <a class="btn-floating btn-middle red" style="text-align: center" id="getIdCode3">
+                    验证</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="idCode3" type="number" class="validate">
+                <label data-error="输入错误" for="idCode3" id="idCodeLable3">短信验证码</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="password" type="password" class="validate">
+                <label for="password">Password</label>
+            </div>
+        </div>
+
+    </form>
+    <div>
+        <button class="btn waves-effect waves-light" type="submit" name="action" id="login">发布信息
+            <i class="material-icons right">send</i>
+        </button>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+{% endblock %}
