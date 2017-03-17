@@ -98,6 +98,27 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.name
 
+class Searchrecord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    source = db.Column(db.String(80))
+    source_img = db.Column(db.String(80))
+    source_id = db.Column(db.Integer)
+    confidence = db.Column(db.String(120))
+    detail = db.Column(db.String(120))
+    theshold = db.Column(db.String(120))
+    tag = db.Column(db.String(120))
+    target = db.Column(db.String(120))
+    def __init__(self,target='', tag='',source='',source_img='',source_id='',confidence='',detail='',theshold=''):
+        self.source = source
+        self.source_img = source_img
+        self.source_id = source_id
+        self.confidence=confidence
+        self.detail = detail
+        self.theshold = theshold
+        self.tag=tag
+        self.target=target
+    def __repr__(self):
+        return '<Searchrecord %r>' % self.source
 
 class Missingchildren(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -5,7 +5,7 @@ import requests
 from dbORM import Findingchildren,Childrenface,Missingchildren,db
 from moduleGlobal import app
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
+import json
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 class FaceSet(object):
     def __init__(self, apiSecret, apiKey):
@@ -103,25 +103,26 @@ class FaceSet(object):
                        'outer_id': i['outer_id']}
             r = requests.post(url=self.searchUrl, data=payload)
             searchResult = r.json()
+            print searchResult
             if searchResult.has_key('error_message'):
-                return {'error': searchResult['error_message']}
-            if searchResult.has_key('result'):
-                if searchResult['result']:
-                    faceToken = searchResult['result'][0]['face_token']
-                    confidence = searchResult['result'][0]['confidence']
+                return {'error': searchResult['error_message'],'detail':json.dumps(searchResult)}
+            if searchResult.has_key('results'):
+                if searchResult['results']:
+                    faceToken = searchResult['results'][0]['face_token']
+                    confidence = searchResult['results'][0]['confidence']
                     thresholds = searchResult['thresholds']
                     if confidence<=thresholds['1e-3']:
-                        return {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                        return {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif  confidence>=thresholds['1e-3'] and confidence<=thresholds['1e-4'] :
-                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-4'] and confidence<=thresholds['1e-5'] :
-                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-5']:
-                        return {'status':3,'confidence':confidence,'thresholds':thresholds,'token':faceToken}
+                        return {'status':3,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                 else:
-                    return {'error':'noface'}
+                    return {'error':'noface','detail':json.dumps(searchResult)}
             else:
-                return {'error': 'noface'}
+                return {'error': 'noface','detail':json.dumps(searchResult)}
 
 def t(children,face):
 
@@ -136,14 +137,70 @@ def t(children,face):
             db.session.commit()
         else:
             print 'pass'
+def searchResultHandleForWechat(searchResult):
+    title=description=url=''
+    status='ok'
+    if searchResult.has_key('error'):
+        if searchResult['error'] == 'noface':
+            title = u'对不起'
+            description = u'请上传更清晰的图片'
+            url = app.config.get('HOST')
+            status='bad'
+        else:
+            title = u'对不起服务器正忙'
+            description = u'请上传更清晰的图片'
+            status = 'bad'
+            url = app.config.get('HOST')
+    elif searchResult['status'] == 0:
+        title = u'对不起,没有匹配到合适的图片'
+        description = u'感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如之后有匹配成功会及时通知您'
+        url = app.config.get('HOST')
+    elif searchResult['status'] == 1:
+        title = u'找到一张相似度%d的照片' % searchResult['confidence']
+        description = u'我们会立刻处理此信息，请在5分钟内回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
+    elif searchResult['status'] == 2:
+        title = u'找到一张相似度%d的照片，相似度比较高' % searchResult['confidence']
+        description = u'我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
+    elif searchResult['status'] == 3:
+        title = u'找到一张相似度%d的照片！！！，相似度非常高' % searchResult['confidence']
+        description = u'这种情况十分紧急，我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息，或直接与13061938526联系'
+    return {'status':status,'title':title,'description':description,'url':url}
+def searchResultHandleForWeb(searchResult):
+    title=description=url=''
+    status='ok'
+    if searchResult.has_key('error'):
+        if searchResult['error'] == 'noface':
+            title = u'对不起'
+            description = u'请上传更清晰的图片'
+            url = app.config.get('HOST')
+            status='bad'
+        else:
+            title = u'对不起服务器正忙'
+            description = u'请上传更清晰的图片'
+            status = 'bad'
+            url = app.config.get('HOST')
+    elif searchResult['status'] == 0:
+        title = u'对不起,没有匹配到合适的图片'
+        description = u'感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如之后有匹配成功会及时通知您'
+        url = app.config.get('HOST')
+    elif searchResult['status'] == 1:
+        title = u'找到一张相似度%d的照片' % searchResult['confidence']
+        description = u'我们会立刻处理此信息,并可能随时联系您'
+    elif searchResult['status'] == 2:
+        title = u'找到一张相似度%d的照片，相似度比较高' % searchResult['confidence']
+        description = u'我们会立刻处理此信息,并可能随时联系您'
+    elif searchResult['status'] == 3:
+        title = u'找到一张相似度%d的照片！！！，相似度非常高' % searchResult['confidence']
+        description = u'这种情况十分紧急，我们会立刻处理此信息,并可能随时联系您，或直接与13061938526联系'
+    return {'status':status,'title':title,'description':description,'url':url}
 
 def main():
     children=Missingchildren.query.all()
     total = len(children)
     tCount = 1
     per_page= int(total/tCount)
-    secret = app.config.get('FACE_SECRET')
-    apiKey = app.config.get('FACE_API_KEY')
+    secret = app.config.get('FACE_SECRET_TEST')
+    apiKey = app.config.get('FACE_API_KEY_TEST')
     face = FaceSet(secret, apiKey)
     # print face.getSets('')
     # print face.getDetail('missingchildren_4')
@@ -158,7 +215,11 @@ def main():
     print len(g)
     gevent.joinall(g)
 
-main()
+
+secret = app.config.get('FACE_SECRET_TEST')
+apiKey = app.config.get('FACE_API_KEY_TEST')
+Face = FaceSet(secret, apiKey)
+# main()
 
 
 
