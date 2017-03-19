@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from gevent import monkey; monkey.patch_socket()
+from gevent import monkey;monkey.patch_all()
 import gevent
 import requests
 from dbORM import Findingchildren,Childrenface,Missingchildren,db
@@ -33,7 +33,7 @@ class FaceSet(object):
         r = requests.post(url=self.getSetUrl, data=payload,verify=False)
         return r.json()
 
-    def uploadFaces(self, urls, tag):
+    def uploadFaces(self, urls='', tag='',token=''):
 
         sets = self.getSets(tag)['facesets']
         names = []
@@ -50,10 +50,14 @@ class FaceSet(object):
         total = len(urls)
         successCount = 0
         for i in range(total):
-            payloadForToken = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'image_url': urls[i],
-                               'return_landmark': 1, 'return_attributes': 'gender,age'}
-            rForToken = requests.post(url=self.getFaceToken, data=payloadForToken,verify=False)
-            tokenResult = rForToken.json()
+            if urls:
+                payloadForToken = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'image_url': urls[i],
+                                   'return_landmark': 1, 'return_attributes': 'gender,age'}
+                rForToken = requests.post(url=self.getFaceToken, data=payloadForToken)
+                tokenResult = rForToken.json()
+            else :
+                tokenResult={'faces':[{'face_token':token}]}
+
             if not tokenResult.has_key('error_message'):
                 if not tokenResult['faces']:
                     result.append('')
@@ -63,7 +67,7 @@ class FaceSet(object):
                     payloadForAdd = {'api_key': self.apiKey, 'api_secret': self.apiSecret,
                                      'outer_id': tag + '_' + str(lastName),
                                      'face_tokens': token}
-                    rForAdd = requests.post(url=self.addFaceUrl, data=payloadForAdd,verify=False)
+                    rForAdd = requests.post(url=self.addFaceUrl, data=payloadForAdd)
                     addResult = rForAdd.json()
                     if not addResult.has_key('error_message'):
                         if addResult['failure_detail'] and addResult['failure_detail'][0]['reason'] == 'QUOTA_EXCEEDED':
@@ -94,7 +98,7 @@ class FaceSet(object):
     def deleteSet(self, id):
         payload = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'outer_id': id,
                    'face_tokens': 'RemoveAllFaceTokens'}
-        r = requests.post(url=self.deleteSetsUrl, data=payload,verify=False)
+        r = requests.post(url=self.deleteSetsUrl, data=payload)
         return r.json()
     def search(self,image,tag):
         sets = self.getSets(tag)
@@ -111,14 +115,12 @@ class FaceSet(object):
                     faceToken = searchResult['results'][0]['face_token']
                     confidence = searchResult['results'][0]['confidence']
                     thresholds = searchResult['thresholds']
-                    if confidence<=thresholds['1e-3']:
+                    if confidence<=thresholds['1e-4']:
                         return {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
-                    elif  confidence>=thresholds['1e-3'] and confidence<=thresholds['1e-4'] :
-                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-4'] and confidence<=thresholds['1e-5'] :
-                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
+                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-5']:
-                        return {'status':3,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
+                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                 else:
                     return {'error':'noface','detail':json.dumps(searchResult)}
             else:
@@ -156,12 +158,9 @@ def searchResultHandleForWechat(searchResult):
         description = u'感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如之后有匹配成功会及时通知您'
         url = app.config.get('HOST')
     elif searchResult['status'] == 1:
-        title = u'找到一张相似度%d的照片' % searchResult['confidence']
-        description = u'我们会立刻处理此信息，请在5分钟内回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
-    elif searchResult['status'] == 2:
         title = u'找到一张相似度%d的照片，相似度比较高' % searchResult['confidence']
         description = u'我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息'
-    elif searchResult['status'] == 3:
+    elif searchResult['status'] == 2:
         title = u'找到一张相似度%d的照片！！！，相似度非常高' % searchResult['confidence']
         description = u'这种情况十分紧急，我们会立刻处理此信息，请立刻回复此图片的[拍摄地点,您的联系方式]，我们将推送给您给您详细匹配信息，或直接与13061938526联系'
     return {'status':status,'title':title,'description':description,'url':url}
@@ -183,13 +182,11 @@ def searchResultHandleForWeb(searchResult):
         title = u'对不起,没有匹配到合适的图片'
         description = u'感谢您的爱心，请在5分钟内回复此图片的拍摄地点，我们将把信息上传至数据库，如之后有匹配成功会及时通知您'
         url = app.config.get('HOST')
+
     elif searchResult['status'] == 1:
-        title = u'找到一张相似度%d的照片' % searchResult['confidence']
-        description = u'我们会立刻处理此信息,并可能随时联系您'
-    elif searchResult['status'] == 2:
         title = u'找到一张相似度%d的照片，相似度比较高' % searchResult['confidence']
         description = u'我们会立刻处理此信息,并可能随时联系您'
-    elif searchResult['status'] == 3:
+    elif searchResult['status'] == 2:
         title = u'找到一张相似度%d的照片！！！，相似度非常高' % searchResult['confidence']
         description = u'这种情况十分紧急，我们会立刻处理此信息,并可能随时联系您，或直接与13061938526联系'
     return {'status':status,'title':title,'description':description,'url':url}

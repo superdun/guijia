@@ -15,6 +15,7 @@ import os
 import os.path as op
 from moduleGlobal import app, admin,qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import time
+from moduleFaceSet import Face,searchResultHandleForWeb
 
 def dashboard():
 
@@ -81,6 +82,16 @@ class MissingChildrenView(LoginView):
         'status': SelectField(u'status', choices=[('open', u'发布'), ('pending', u'不发布')]),
     }
     column_formatters = dict(created_at=lambda v, c, m, p:date_format(m.created_at),missing_time=lambda v, c, m, p:date_format(m.missing_time))
+    def  on_model_change(self, form, model, is_created):
+        if model.status == 'open':
+            print '@@@@@@'
+            face=Face
+            tag = 'missingchildren'
+            token
+
+            rawSearchResult = Face.search(model.token, tag)
+            searchResult = searchResultHandleForWeb(rawSearchResult)
+
 class FindingChildrenView(LoginView):
     column_exclude_list=('img','source')
     column_formatters = dict(created_at=lambda v, c, m, p:date_format(m.created_at),finding_time=lambda v, c, m, p:date_format(m.finding_time))

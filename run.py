@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, session
-from dbORM import db,Searchrecord, User, Missingchildren, Message, Childrenface, Findingchildren
+from dbORM import db,Searchrecord, User, Missingchildren, Message, Childrenface, Findingchildren,Fchildrenface
 import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
@@ -219,7 +219,6 @@ def newCluApi():
                               status='pending')
 
         db.session.add(clu)
-        db.session.commit()
 
         cache.delete(c_tel)
         tag='missingchildren'
@@ -228,20 +227,27 @@ def newCluApi():
         if searchResult['status']!='ok':
             searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
                                         confidence=0,
-                                        detail=rawSearchResult['detail'],
-                                        theshold=rawSearchResult['thresholds'],target=rawSearchResult['token'])
+                                        detail=json.dumps(rawSearchResult['detail']),
+                                        theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token'],status='error')
+            db.session.add(searchrecord)
 
             notiMsg = '{"name": "%s","number":"%s"}' % (u'新线索0', c_tel)
         else:
             searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
                                         confidence=rawSearchResult['confidence'],
-                                        detail=rawSearchResult['detail'],
-                                        theshold=rawSearchResult['thresholds'],target=rawSearchResult['token'])
+                                        detail=json.dumps(rawSearchResult['detail']),
+                                        theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token']
+                                        ,status=rawSearchResult['status'])
+            db.session.add(searchrecord)
 
             notiMsg = '{"name": "%s","number":"%s"}' % (u'新线索'+str(rawSearchResult['confidence']), c_tel)
 
+        # uploadFaceSetResult = Face.uploadFaces(sourceImg, 'findingchildren')
+        # fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0])
+        # db.session.add(fChildrenFace)
+        db.session.commit()
         sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
-        return jsonify(status='ok', error=u'')
+        return jsonify(status='ok', error=u'',msg=searchResult)
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
 

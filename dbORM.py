@@ -107,8 +107,10 @@ class Searchrecord(db.Model):
     detail = db.Column(db.String(120))
     theshold = db.Column(db.String(120))
     tag = db.Column(db.String(120))
+    created_at=db.Column(db.String(120))
     target = db.Column(db.String(120))
-    def __init__(self,target='', tag='',source='',source_img='',source_id='',confidence='',detail='',theshold=''):
+    status = db.Column(db.String(120))
+    def __init__(self,target='', tag='',status='',screated_at='',source='',source_img='',source_id='',confidence='',detail='',theshold=''):
         self.source = source
         self.source_img = source_img
         self.source_id = source_id
@@ -117,6 +119,8 @@ class Searchrecord(db.Model):
         self.theshold = theshold
         self.tag=tag
         self.target=target
+        self.created_at = time.time()
+        self.status = status
     def __repr__(self):
         return '<Searchrecord %r>' % self.source
 
