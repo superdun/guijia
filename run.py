@@ -99,7 +99,7 @@ def mapDataApi():
 def idcodeApi():
     num = str(int(request.form['phone']))
     idCode = makeIdCode(num)
-    msg = {"idCode": "%s" % idCode}
+    msg = '{"idCode": "%s"}' % idCode
     sendResult = sendSMS('id', num, msg).send()
     print sendResult
     return jsonify({'status': 'ok', 'msg': sendResult})
