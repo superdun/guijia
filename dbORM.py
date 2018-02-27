@@ -104,7 +104,7 @@ class Searchrecord(db.Model):
     source_img = db.Column(db.String(80))
     source_id = db.Column(db.Integer)
     confidence = db.Column(db.String(120))
-    detail = db.Column(db.String(120))
+    detail = db.Column(db.String(12000))
     theshold = db.Column(db.String(120))
     tag = db.Column(db.String(120))
     created_at=db.Column(db.String(120))

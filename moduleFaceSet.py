@@ -33,7 +33,7 @@ class FaceSet(object):
         r = requests.post(url=self.getSetUrl, data=payload,verify=False)
         return r.json()
 
-    def uploadFaces(self, urls='', tag='',token=''):
+    def uploadFaces(self, urls=[], tag='',token=''):
 
         sets = self.getSets(tag)['facesets']
         names = []
@@ -167,6 +167,7 @@ def searchResultHandleForWechat(searchResult):
 def searchResultHandleForWeb(searchResult):
     title=description=url=''
     status='ok'
+    stage = 0
     if searchResult.has_key('error'):
         if searchResult['error'] == 'noface':
             title = u'对不起'
@@ -186,10 +187,12 @@ def searchResultHandleForWeb(searchResult):
     elif searchResult['status'] == 1:
         title = u'找到一张相似度%d的照片，相似度比较高' % searchResult['confidence']
         description = u'我们会立刻处理此信息,并可能随时联系您'
+        stage = 1
     elif searchResult['status'] == 2:
         title = u'找到一张相似度%d的照片！！！，相似度非常高' % searchResult['confidence']
         description = u'这种情况十分紧急，我们会立刻处理此信息,并可能随时联系您，或直接与13061938526联系'
-    return {'status':status,'title':title,'description':description,'url':url}
+        stage = 2
+    return {'status':status,'title':title,'description':description,'url':url,'stage':stage}
 
 def main():
     children=Missingchildren.query.all()

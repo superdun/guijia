@@ -119,7 +119,7 @@ $(document).ready(function () {
                         $('#idCode1').removeClass('valid').addClass('invalid')
                     }
                     if (result['status'] == 'ok') {
-                        alert('信息录入成功，我们将尽快审核，如成功将用短信通知您')
+                        alert('信息录入成功，我们将尽快审核，如成功将用短信通知您\n'+result['title']+"\n"+result['description'])
                     }
                 }
 

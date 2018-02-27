@@ -29,7 +29,7 @@ application = app
 
 @app.template_filter('strftime')
 def _jinja2_filter_datetime(date):
-    return time.strftime(u"%Y年%m月%d日", time.localtime(float(date)))
+    return time.strftime(u"%Y-%m-%d", time.localtime(float(date)))
 
 
 def makeIdCode(key):
@@ -130,12 +130,12 @@ def profileApi():
     img = request.files['img']
     if not img:
         return jsonify({'status': 'nopic', 'msg': ''})
-    if idCode != cache.get(c_tel):
-        return jsonify({'status': 'wrongcode', 'msg': ''})
+    # if idCode != cache.get(c_tel):
+    #     return jsonify({'status': 'wrongcode', 'msg': ''})
     sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
     if sourceResult['result'] == 1:
         sourceImg = sourceResult['localUrl']
-        profile = Missingchildren(bid='', image=sourceImg, name=name, gender=gender, birthday=birthday
+        profile = Missingchildren(bid=None, image=sourceImg, name=name, gender=gender, birthday=birthday
                                   , height=str(height) + u'厘米', missing_time=missing_time, source='guijia',
                                   c_name=c_name
                                   , c_tel=c_tel, confirm_location='',
@@ -145,15 +145,32 @@ def profileApi():
                                   description=description, comment='', login_time=time.time(), volunteer='',
                                   status='pending',
                                   short_name=name.split('(')[0].split(u'（')[0].split(' ')[0])
+
         db.session.add(profile)
         db.session.commit()
         cache.delete(c_tel)
-        notiMsg = '{"name": "%s","number":"%s"}' % (name, c_tel)
-        sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
+        tag='findingchildren'
+        rawSearchResult = Face.search(sourceImg,tag)
+        searchResult=searchResultHandleForWeb(rawSearchResult)
+        uploadFaceSetResult = Face.uploadFaces([sourceImg], 'missingchildren')
 
-        return jsonify(status='ok', error=u'')
+
+        print uploadFaceSetResult
+        CF = Childrenface(childrenId=profile.id, token=uploadFaceSetResult[0])
+        db.session.add(CF)
+        db.session.commit()
+        description=""
+        title=""
+        if searchResult['stage']>0:
+            description=searchResult['description']
+            title=searchResult['title']
+        print searchResult['description']
+        notiMsg = '{"name": "%s","number":"%s"}' % (name, c_tel)
+        # sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
+
+        return jsonify(status='ok', error=u'',title=title,description=description)
     else:
-        return jsonify(status='failed', error=u'服务器出错，请稍后再试')
+        return jsonify(status='failed', error=u'服务器出错，请稍后再试',description=u"",title="")
 
 
 @app.route('/api/member', methods=['POST', ])
@@ -219,7 +236,7 @@ def newCluApi():
                               status='pending')
 
         db.session.add(clu)
-
+        db.session.commit()
         cache.delete(c_tel)
         tag='missingchildren'
         rawSearchResult = Face.search(sourceImg,tag)
@@ -230,8 +247,8 @@ def newCluApi():
                                         detail=json.dumps(rawSearchResult['detail']),
                                         theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token'],status='error')
             db.session.add(searchrecord)
-
-            notiMsg = '{"name": "%s","number":"%s"}' % (u'新线索0', c_tel)
+            db.session.commit()
+            notiMsg = u'{"name": "%s","number":"%s"}' % (u'新线索0', c_tel)
         else:
             searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
                                         confidence=rawSearchResult['confidence'],
@@ -239,14 +256,15 @@ def newCluApi():
                                         theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token']
                                         ,status=rawSearchResult['status'])
             db.session.add(searchrecord)
+            db.session.commit()
+            notiMsg = u'{"name": "%s","number":"%s"}' % (u'新线索'+str(rawSearchResult['confidence']), c_tel)
 
-            notiMsg = '{"name": "%s","number":"%s"}' % (u'新线索'+str(rawSearchResult['confidence']), c_tel)
 
-        # uploadFaceSetResult = Face.uploadFaces(sourceImg, 'findingchildren')
-        # fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0])
-        # db.session.add(fChildrenFace)
+        uploadFaceSetResult = Face.uploadFaces([sourceImg], 'findingchildren')
+        fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0])
+        db.session.add(fChildrenFace)
         db.session.commit()
-        sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
+        # sendNotiResult = sendSMS(u'noti_a', adminPhone, notiMsg).send()
         return jsonify(status='ok', error=u'',msg=searchResult)
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
@@ -316,9 +334,9 @@ def wechat():
     nonce = request.args.get('nonce')
     print request.args.get('echostr')
     body_text = request.data
-    return request.args.get('echostr')
-    # return wechat_resp(token, appid, appsecret,
-    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+    # return request.args.get('echostr')
+    return wechat_resp(token, appid, appsecret,
+                       encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
 
 
 # @app.route('/token')
