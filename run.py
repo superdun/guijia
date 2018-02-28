@@ -130,8 +130,8 @@ def profileApi():
     img = request.files['img']
     if not img:
         return jsonify({'status': 'nopic', 'msg': ''})
-    # if idCode != cache.get(c_tel):
-    #     return jsonify({'status': 'wrongcode', 'msg': ''})
+    if idCode != cache.get(c_tel):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
     sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
     if sourceResult['result'] == 1:
         sourceImg = sourceResult['localUrl']
@@ -167,7 +167,7 @@ def profileApi():
             title=searchResult['title']
         # print searchResult['description']
         notiMsg = '{"name": "%s","number":"%s"}' % (name, c_tel)
-        # sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
+        sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
 
         return jsonify(status='ok', error=u'',title=title,description=description)
     else:
@@ -198,7 +198,7 @@ def newMemberApi():
     db.session.commit()
     cache.delete(num)
     notiMsg = '{"name": "%s","number":"%s"}' % (name, num)
-    sendNotiResult = sendSMS('noti_v', adminPhone, notiMsg).send()
+    # sendNotiResult = sendSMS('noti_v', adminPhone, notiMsg).send()
 
     return jsonify(status='ok', error=u'')
 
@@ -223,8 +223,8 @@ def newCluApi():
     img = request.files['img']
     if not img:
         return jsonify({'status': 'nopic', 'msg': ''})
-    # if idCode != cache.get(c_tel):
-    #     return jsonify({'status': 'wrongcode', 'msg': ''})
+    if idCode != cache.get(c_tel):
+        return jsonify({'status': 'wrongcode', 'msg': ''})
     sourceResult = thumb.upload_file(img, UPLOAD_URL, QINIU_DOMAIN, qiniu_store)
     if sourceResult['result'] == 1:
         sourceImg = sourceResult['localUrl']
@@ -268,7 +268,7 @@ def newCluApi():
         fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0][0])
         db.session.add(fChildrenFace)
         db.session.commit()
-        # sendNotiResult = sendSMS(u'noti_a', adminPhone, notiMsg).send()
+        sendNotiResult = sendSMS(u'noti_a', adminPhone, notiMsg).send()
         return jsonify(status='ok', error=u'',msg=searchResult)
     else:
         return jsonify(status='failed', error=u'服务器出错，请稍后再试')
