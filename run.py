@@ -24,7 +24,7 @@ import json
 
 #
 
-application = app
+
 
 
 @app.template_filter('strftime')
@@ -464,6 +464,6 @@ def logout():
     return 'Logged out'
 
 
-app.debug = True
+application = app
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(port=8081)
