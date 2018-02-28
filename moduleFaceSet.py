@@ -6,6 +6,7 @@ from dbORM import Findingchildren,Childrenface,Missingchildren,db
 from moduleGlobal import app
 # from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import json
+import  time
 # requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 class FaceSet(object):
     def __init__(self, apiSecret, apiKey):
@@ -31,7 +32,15 @@ class FaceSet(object):
     def getSets(self, tag=''):
         payload = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'tags': tag}
         r = requests.post(url=self.getSetUrl, data=payload,verify=False)
-        return r.json()
+        sets =  r.json()
+        time.sleep(0.1)
+        if 'facesets' not in sets:
+            for n in range(3):
+                time.sleep(0.01)
+                sets = self.getSets(tag)
+                if 'facesets'  in sets:
+                    break
+        return sets
 
     def uploadFaces(self, urls=[], tag='',token=''):
 
@@ -93,7 +102,7 @@ class FaceSet(object):
             else:
                 result.append('')
                 failed.append([urls[i], tokenResult['error_message']])
-        return result
+        return [result,failed]
 
     def deleteSet(self, id):
         payload = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'outer_id': id,
@@ -102,7 +111,10 @@ class FaceSet(object):
         return r.json()
     def search(self,image,tag):
         sets = self.getSets(tag)
+        res = {"status":-1}
+        tmp_r={}
         for i in sets['facesets']:
+            time.sleep(0.1)
             payload = {'api_key': self.apiKey, 'api_secret': self.apiSecret, 'image_url': image,
                        'outer_id': i['outer_id']}
             r = requests.post(url=self.searchUrl, data=payload)
@@ -116,16 +128,18 @@ class FaceSet(object):
                     confidence = searchResult['results'][0]['confidence']
                     thresholds = searchResult['thresholds']
                     if confidence<=thresholds['1e-4']:
-                        return {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
+                        tmp_r = {'status':0,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-4'] and confidence<=thresholds['1e-5'] :
-                        return {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
+                        tmp_r = {'status':1,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                     elif confidence>=thresholds['1e-5']:
-                        return {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
+                        tmp_r = {'status':2,'confidence':confidence,'thresholds':thresholds,'token':faceToken,'detail':json.dumps(searchResult)}
                 else:
                     return {'error':'noface','detail':json.dumps(searchResult)}
             else:
                 return {'error': 'noface','detail':json.dumps(searchResult)}
-
+            if tmp_r['status']>res['status']:
+                res = tmp_r
+        return res
 # def t(children,face):
 #
 #     for i in children:
@@ -168,6 +182,7 @@ def searchResultHandleForWeb(searchResult):
     title=description=url=''
     status='ok'
     stage = 0
+
     if searchResult.has_key('error'):
         if searchResult['error'] == 'noface':
             title = u'对不起'
@@ -216,12 +231,10 @@ def searchResultHandleForWeb(searchResult):
 #     gevent.joinall(g)
 
 
-secret = app.config.get('FACE_SECRET_TEST')
-apiKey = app.config.get('FACE_API_KEY_TEST')
+secret = app.config.get('FACE_SECRET')
+apiKey = app.config.get('FACE_API_KEY')
 Face = FaceSet(secret, apiKey)
 # main()
-
-
 
 
 

@@ -6,7 +6,7 @@ import thumb
 from moduleGlobal import app, qiniu_store, QINIU_DOMAIN, CATEGORY, UPLOAD_URL
 import moduleAdmin as admin
 import flask_login
-# from moduleWechat import wechat_resp
+from moduleWechat import Wechat
 from flask_paginate import Pagination, get_page_args
 from werkzeug import secure_filename
 from moduleCache import cache
@@ -154,9 +154,10 @@ def profileApi():
         searchResult=searchResultHandleForWeb(rawSearchResult)
         uploadFaceSetResult = Face.uploadFaces([sourceImg], 'missingchildren')
 
-
+        if uploadFaceSetResult[0][0]=="":
+            return jsonify(status='failed', error=u'服务器出错，请稍后再试', description=u"", title="")
         # print uploadFaceSetResult
-        CF = Childrenface(childrenId=profile.id, token=uploadFaceSetResult[0])
+        CF = Childrenface(childrenId=profile.id, token=uploadFaceSetResult[0][0])
         db.session.add(CF)
         db.session.commit()
         description=""
@@ -242,13 +243,13 @@ def newCluApi():
         rawSearchResult = Face.search(sourceImg,tag)
         searchResult=searchResultHandleForWeb(rawSearchResult)
         if searchResult['status']!='ok':
-            searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
-                                        confidence=0,
-                                        detail=json.dumps(rawSearchResult['detail']),
-                                        theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token'],status='error')
-            db.session.add(searchrecord)
-            db.session.commit()
-            notiMsg = u'{"name": "%s","number":"%s"}' % (u'新线索0', c_tel)
+            # searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
+            #                             confidence=0,
+            #                             detail=json.dumps(rawSearchResult['detail']),
+            #                             theshold=json.dumps(rawSearchResult['thresholds']),target=rawSearchResult['token'],status='error')
+            # db.session.add(searchrecord)
+            # db.session.commit()
+            return jsonify(status='failed', error=u'服务器出错，请稍后再试')
         else:
             searchrecord = Searchrecord(tag=tag, source='findingchildren', source_id=clu.id,
                                         confidence=rawSearchResult['confidence'],
@@ -261,7 +262,10 @@ def newCluApi():
 
 
         uploadFaceSetResult = Face.uploadFaces([sourceImg], 'findingchildren')
-        fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0])
+        if uploadFaceSetResult[0][0]=="":
+            return jsonify(status='failed', error=u'服务器出错，请稍后再试', description=u"", title="")
+
+        fChildrenFace = Fchildrenface(clu.id, uploadFaceSetResult[0][0])
         db.session.add(fChildrenFace)
         db.session.commit()
         # sendNotiResult = sendSMS(u'noti_a', adminPhone, notiMsg).send()
@@ -334,9 +338,10 @@ def wechat():
     nonce = request.args.get('nonce')
     # print request.args.get('echostr')
     body_text = request.data
-    return request.args.get('echostr')
-    # return wechat_resp(token, appid, appsecret,
-    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+    # return request.args.get('echostr')
+    w = Wechat(token, appid, appsecret,
+                       encoding_aes_key, encrypt_mode, signature, timestamp, nonce)
+    return w.getResponse(body_text)
 
 
 # @app.route('/token')

@@ -3,8 +3,8 @@ from wechat_sdk import WechatBasic, WechatConf
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import (TextMessage, ImageMessage)
 from moduleCache import cache
-from moduleFaceSet import Face,searchResultHandle
-from dbORM import Findingchildren
+from moduleFaceSet import Face,searchResultHandleForWeb
+from dbORM import Childrenface,Missingchildren
 import requests
 from moduleGlobal import app
 import json
@@ -42,23 +42,46 @@ class Wechat(object):
             raw = wechat.message.raw
             if isinstance(wechat.message, TextMessage):
                 content = wechat.message.content
+                return wechat.response_text(content)
             elif isinstance(wechat.message, ImageMessage):
                 if cache.get('wechat_' + source):
                     #too fast
                     title = u'对不起'
                     description = u'请不要过于频繁发送图片'
                     url = app.config.get('HOST')
+                    return  wechat.response_news([{
+                        "title": title,
+                        "description":description,
+                        "url":url
+                    }])
                 else:
                     picurl = wechat.message.picurl
+                    uploadFaceSetResult = Face.uploadFaces([picurl], 'findingchildren')
                     media_id = wechat.message.media_id
                     searchResult = face.search(picurl, 'missingchildren')
-                    searchResultHandle(searchResult)
-
-
-
+                    rawResult = searchResultHandleForWeb(searchResult)
+                    if 'token'  not in searchResult:
+                        return wechat.response_text(u"服务器正忙")
+                    title = rawResult['title']
+                    sameChildRecord = Childrenface.query.filter_by(token=searchResult['token']).first()
+                    description = rawResult['description']
+                    url = app.config.get('HOST')
+                    if sameChildRecord:
+                        sameChild = Missingchildren.query.filter_by(id=sameChildRecord.childrenId).first()
+                        return wechat.response_news([{
+                            "title": title,
+                            "description": description,
+                            "picurl": sameChild.image
+                        }])
+                    else:
+                        return wechat.response_news([{
+                            "title": title,
+                            "description": description,
+                            "url": url
+                        }])
 
             else:
-                return 0
+                return wechat.response_text(u"请上传疑似走失者的图片")
 
         else:
-            return 0
+            return wechat.response_text(u"服务器正在修复")

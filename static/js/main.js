@@ -121,6 +121,9 @@ $(document).ready(function () {
                     if (result['status'] == 'ok') {
                         alert('信息录入成功，我们将尽快审核，如成功将用短信通知您\n'+result['title']+"\n"+result['description'])
                     }
+                    else {
+                        alert('服务器忙，重试！')
+                    }
                 }
 
             })
@@ -164,6 +167,9 @@ $(document).ready(function () {
                     if (result['status'] == 'ok') {
                         alert('信息录入成功，我们将尽快审核，如成功将用短信通知您')
                     }
+                    else {
+                        alert('服务器忙，重试！')
+                    }
                 }
 
             })
@@ -199,6 +205,9 @@ $(document).ready(function () {
                     }
                     if (result['status'] == 'ok') {
                         alert('信息录入成功，我们将尽快审核，如成功将用短信通知您')
+                    }
+                    else {
+                        alert('服务器忙，重试！')
                     }
                 }
 
