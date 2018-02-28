@@ -4,9 +4,9 @@
 import requests
 from dbORM import Findingchildren,Childrenface,Missingchildren,db
 from moduleGlobal import app
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+# from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import json
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 class FaceSet(object):
     def __init__(self, apiSecret, apiKey):
         self.addFaceUrl = 'https://api-cn.faceplusplus.com/facepp/v3/faceset/addface'
