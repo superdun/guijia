@@ -338,10 +338,10 @@ def wechat():
     nonce = request.args.get('nonce')
     # print request.args.get('echostr')
     body_text = request.data
-    # return request.args.get('echostr')
-    w = Wechat(token, appid, appsecret,
-                       encoding_aes_key, encrypt_mode, signature, timestamp, nonce)
-    return w.getResponse(body_text)
+    return request.args.get('echostr')
+    # w = Wechat(token, appid, appsecret,
+    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce)
+    # return w.getResponse(body_text)
 
 
 # @app.route('/token')
