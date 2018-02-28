@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-from gevent import monkey;monkey.patch_all()
-import gevent
+# from gevent import monkey;monkey.patch_all()
+# import gevent
 import requests
 from dbORM import Findingchildren,Childrenface,Missingchildren,db
 from moduleGlobal import app
@@ -126,19 +126,19 @@ class FaceSet(object):
             else:
                 return {'error': 'noface','detail':json.dumps(searchResult)}
 
-def t(children,face):
-
-    for i in children:
-        print gevent.getcurrent(), i
-        if not Childrenface.query.filter_by(childrenId=i.id).first():
-            url = app.config.get('BAOBEIHUIJIA_IMG_DOMAIN') + i.image
-            result = face.uploadFaces([url], 'missingchildren')
-            print result
-            cf = Childrenface(childrenId=i.id, token=result[0])
-            db.session.add(cf)
-            db.session.commit()
-        else:
-            print 'pass'
+# def t(children,face):
+#
+#     for i in children:
+#         print gevent.getcurrent(), i
+#         if not Childrenface.query.filter_by(childrenId=i.id).first():
+#             url = app.config.get('BAOBEIHUIJIA_IMG_DOMAIN') + i.image
+#             result = face.uploadFaces([url], 'missingchildren')
+#             print result
+#             cf = Childrenface(childrenId=i.id, token=result[0])
+#             db.session.add(cf)
+#             db.session.commit()
+#         else:
+#             print 'pass'
 def searchResultHandleForWechat(searchResult):
     title=description=url=''
     status='ok'
@@ -194,26 +194,26 @@ def searchResultHandleForWeb(searchResult):
         stage = 2
     return {'status':status,'title':title,'description':description,'url':url,'stage':stage}
 
-def main():
-    children=Missingchildren.query.all()
-    total = len(children)
-    tCount = 1
-    per_page= int(total/tCount)
-    secret = app.config.get('FACE_SECRET_TEST')
-    apiKey = app.config.get('FACE_API_KEY_TEST')
-    face = FaceSet(secret, apiKey)
-    # print face.getSets('')
-    # print face.getDetail('missingchildren_4')
-    g = []
-    for  i in range(tCount):
-        print per_page
-
-        offset=i*per_page
-        print offset
-        c = Missingchildren.query.offset(offset).limit(per_page).all()
-        g.append(gevent.spawn(t, c,face))
-    print len(g)
-    gevent.joinall(g)
+# def main():
+#     children=Missingchildren.query.all()
+#     total = len(children)
+#     tCount = 1
+#     per_page= int(total/tCount)
+#     secret = app.config.get('FACE_SECRET_TEST')
+#     apiKey = app.config.get('FACE_API_KEY_TEST')
+#     face = FaceSet(secret, apiKey)
+#     # print face.getSets('')
+#     # print face.getDetail('missingchildren_4')
+#     g = []
+#     for  i in range(tCount):
+#         print per_page
+#
+#         offset=i*per_page
+#         print offset
+#         c = Missingchildren.query.offset(offset).limit(per_page).all()
+#         g.append(gevent.spawn(t, c,face))
+#     print len(g)
+#     gevent.joinall(g)
 
 
 secret = app.config.get('FACE_SECRET_TEST')
