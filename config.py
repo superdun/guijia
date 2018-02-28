@@ -17,4 +17,4 @@ CACHE_DIR ='./cache'
 CACHE_DEFAULT_TIMEOUT = '3000'
 IDCODE_TIMEOUT = '300'
 
-HOST = 'http://www.guijia.org'
+HOST = 'http://www.interoecust.com'
