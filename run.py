@@ -101,7 +101,7 @@ def idcodeApi():
     idCode = makeIdCode(num)
     msg = '{"idCode": "%s"}' % idCode
     sendResult = sendSMS('id', num, msg).send()
-    print sendResult
+    # print sendResult
     return jsonify({'status': 'ok', 'msg': sendResult})
 
 
@@ -155,7 +155,7 @@ def profileApi():
         uploadFaceSetResult = Face.uploadFaces([sourceImg], 'missingchildren')
 
 
-        print uploadFaceSetResult
+        # print uploadFaceSetResult
         CF = Childrenface(childrenId=profile.id, token=uploadFaceSetResult[0])
         db.session.add(CF)
         db.session.commit()
@@ -164,7 +164,7 @@ def profileApi():
         if searchResult['stage']>0:
             description=searchResult['description']
             title=searchResult['title']
-        print searchResult['description']
+        # print searchResult['description']
         notiMsg = '{"name": "%s","number":"%s"}' % (name, c_tel)
         # sendNotiResult = sendSMS('noti_a', adminPhone, notiMsg).send()
 
@@ -177,7 +177,7 @@ def profileApi():
 def newMemberApi():
     filter_list = []
     adminPhone = app.config.get('SMS_ADMIN_PHONE')
-    print request.form
+    # print request.form
     for i in request.form:
         if request.form[i] == '' or request.form[i] == 'null':
             filter_list.append(i)
@@ -285,7 +285,7 @@ def disappearanceList():
     items = Missingchildren.query.filter(Missingchildren.status == 'open').filter(
         Missingchildren.missing_time != u'未知时间').order_by('missing_time desc').offset(offset).limit(
         per_page).all()
-    print get_page_args()
+    # print get_page_args()
     pagination = Pagination(page=page, total=total,per_page=per_page)
     return render_template('disappearanceList.html', items=items, pagination=pagination,
                            bbhj_img_domain=bbhj_img_domain, local_img_domain=local_img_domain)
@@ -332,11 +332,11 @@ def wechat():
     signature = request.args.get('signature')
     timestamp = request.args.get('timestamp')
     nonce = request.args.get('nonce')
-    print request.args.get('echostr')
+    # print request.args.get('echostr')
     body_text = request.data
-    # return request.args.get('echostr')
-    return wechat_resp(token, appid, appsecret,
-                       encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
+    return request.args.get('echostr')
+    # return wechat_resp(token, appid, appsecret,
+    #                    encoding_aes_key, encrypt_mode, signature, timestamp, nonce, body_text)
 
 
 # @app.route('/token')
@@ -466,4 +466,4 @@ def logout():
 
 application = app
 if __name__ == '__main__':
-    app.run(port=8081)
+    app.run(port=8080)
